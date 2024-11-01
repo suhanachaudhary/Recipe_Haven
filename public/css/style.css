@@ -1,0 +1,357 @@
+/* footer styling */
+.foot{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color:#DBD3D3 ;
+    padding: 30px;
+
+    .left{
+        width: 600px;
+
+        .social-links a{
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 10px;
+        }
+        h2{
+            color: #7C00FE;
+            font-family: cursive;
+        }
+    }
+    .right{
+        width: 400px;
+    }
+}
+p{
+    background-color: #DBD3D3;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 1.2rem;
+    
+}
+/* footer styling end */
+
+
+/* navbar styling */
+.navbar{
+    background-color: #FFD18E !important;
+
+    li a{
+        font-size: 1.1rem;
+        font-weight: 500;
+        color:#7C00FE !important;
+    }
+}
+
+/* search bar styling */
+.search{
+    height: 50px;
+    margin: 30px 0 60px 0;
+    padding: 10px;
+
+    input{
+        border-radius: 25px;
+        height: 50px;
+        border: 4px solid #7C00FE;
+        box-shadow: 4px 4px 4px #7C00FE;
+    }
+    .searhbtn{
+        border-radius: 25px;
+        background-color: #7C00FE;
+        color: #fff;
+        width: 200px;
+    }
+}
+
+/* index card styling */
+.card a{ 
+    text-decoration: none !important;
+    
+}
+.card{
+    border: none !important;
+    margin-bottom: 4rem;
+}
+.card-img-top{
+    border-radius: 1rem;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+.card-body{
+    padding: 0 !important;
+    h5{
+        margin: 4px;
+        color: #FFAF00;
+    }
+    span{
+        color: #414040;
+        margin: 4px;
+        font-weight: 500;
+        font-size: 1.1rem;
+    }
+}
+
+/* button styling */
+.btn{
+    background-color: #7C00FE;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    width: 120px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.btn:hover{
+    background-color: #FFAF00;
+    color:#fff;
+}
+
+/* new page style */
+h2{
+    color: #7C00FE;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.form-label{
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #4f8ce8 !important;
+}
+
+/* show page styling */
+.image img{
+    margin-top: 30px;
+    /* width:40rem; */
+    height: 25rem;
+    background-position: center;
+    background-size: cover;
+    border-radius: 25px;
+}
+/* .show-page-title{
+    height: 70px;
+} */
+.show{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    .left{
+        width: 41rem;
+    }
+    .right{
+        flex: 1;
+        margin-top: 30px;
+        margin-left: 20px;
+    }
+
+}
+
+/* about page styling */
+.about{
+    background-color:#fff;
+    color:#7C00FE;
+    font-family: cursive;
+    height: 70px;
+    text-align: center;
+    padding: 10px 0 10px 0px;
+    left: 0 !important;
+}
+
+h3{
+    color:#FFAF00
+}
+
+
+/* error page styling */
+.error{
+    height: 60vh;
+
+    .alert{
+        height: 110px !important;
+    }
+}
+
+
+/* review page styling */
+
+.reviewBtn {
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    width: 120px;
+    height: 40px;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.ratingstar{
+    display: flex;
+    justify-content:start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* signup page styling */
+
+.signup-container{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    /* flex-wrap: wrap; */
+}
+.signup img{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 88vh;
+    width:800px;
+    margin-left: -115px;
+}
+.signup-page{
+    background-color: #7C00FE;
+    margin-right: -115px;
+    height:88vh ;
+    width: 560px;
+}
+.signup-page .card{
+    flex: 1;
+    width: 500px;
+    height: 70vh;
+    margin-top: 40px;
+    margin-left: 40px;
+    padding: 20px;
+}
+
+/* home page styling */
+
+.containers{
+    top: 50%;
+    left: 50%;
+    /* position: absolute; 
+    transform: translate(-50%,-50%); */
+    width: 1100px;
+    height: 600px;
+    background-color: #f5f5f5;
+    box-shadow: 0 30px 50px #dbdbdb;
+}
+.containers .slide .item{
+    width: 200px;
+    height: 300px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0,-50%);
+    border-radius: 20px;
+    box-shadow: 0 30px 50px #505050;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    transition: 0.5s;
+    display: inline-block;
+}
+.slide .item:nth-child(1),
+.slide .item:nth-child(2){
+    top: 60px;
+    left: 0;
+    transform: translate(0,0);
+    width: 100%;
+    height: 90vh;
+    border-radius: 0;
+}
+
+.slide .item:nth-child(3){
+    left: 50%;
+}
+
+.slide .item:nth-child(4){
+    left: calc(50% + 220px);
+}
+
+.slide .item:nth-child(5){
+    left: calc(50% + 440px);
+}
+
+.slide .item:nth-child( n+6 ){
+    left: calc(50% + 660px);
+}
+
+.item .content{
+    position: absolute;
+    top: 50%;
+    left: 100px;
+    width: 300px;
+    text-align: left;
+    color:#eee;
+    transform: translate(0,-50%);
+    display: none;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.slide .item:nth-child(2) .content{
+    display: block;
+}
+
+.content .name{
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: bold;
+    opacity: 0;
+    animation: animate 1s ease-in-out 1 forwards;
+}
+
+.content .description{
+    margin-top: 10px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: animate 0.3s ease-in-out 1 forwards;
+}
+
+.content .slidebtn{
+    padding: 10px;
+    opacity: 0;
+     /* /*  opacity=> //this property create new stacking content  */
+    animation: animate 0.6s ease-in-out 1 forwards;
+    background-color: #7C00FE;
+    color: #fff;
+    border-radius: 8px;
+}
+
+@keyframes animate{
+    from{
+        opacity: 0;
+        transform: translate(0,100px);
+        filter: blur(33px);
+    }
+    to{
+        opacity: 1;
+        transform: translate(0);
+        filter: blur(0);
+    }
+}
+
+.buttons{
+    width: 100%;
+    text-align: center;
+    bottom: 20px;
+    position: absolute;
+;
+}
+
+.buttons .slideerbtn{
+    width: 40px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: 0.3s;
+}
+.buttons .slideerbtn:hover{
+    background-color: #7C00FE;
+    color: #fff;
+}
+
+
+

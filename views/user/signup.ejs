@@ -1,0 +1,36 @@
+
+<% layout("/layouts/boilerplate") %>
+
+<body>
+    <div class="signup-container">
+        <div class="signup col-6">
+            <img src="/images/paneer.png" alt="signpage">
+        </div>
+
+        <div class="signup-page">
+            <div class="card">
+                <h3 style="text-align: center;">Join Recipe Haven</h3>
+                <form class="row g-3 needs-validation" action="/signup" method="POST" novalidate>
+                    <div class="col-12">
+                        <label for="inputAddress" class="form-label">Username</label>
+                        <input type="text" name="username" class="form-control" id="inputAddress" required>            
+                    </div><br>
+                    <div class="col-12">
+                        <label for="inputAddress" class="form-label">Email</label>
+                        <input type="email" name="email" class="form-control" required id="inputAddress"/>
+                        <div class="invalid-feedback">
+                            Please provide valid Email!
+                        </div>
+                    </div><br>
+                    <div class="col-md-12">
+                    <label for="inputPassword4" class="form-label">Password</label>
+                    <input type="text" name="password" class="form-control" id="inputPassword4" required>
+                    
+                </div><br>
+                <button class="btn btn-success align-item-center">Signup</button>
+                <br>
+                <a href="/login" style="text-align: center;">Alreday have an account. <b>Login here</b></a>
+            </div>
+        </div>
+    </div>    
+</body>

@@ -1,0 +1,80 @@
+
+<% layout("/layouts/boilerplate") %>
+<body>
+    <div class="container mt-4 mb-4">
+        <h2>Edit Your Recipe Details</h2>
+        <form class="row g-3 needs-validation" action="/listings/<%=listing._id%>?_method=PUT" method="POST" 
+            novalidate enctype="multipart/form-data">
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Title</label>
+                <input type="text" name="listing[title]" class="form-control" id="inputAddress" value="<%=listing.title%>" required>
+                <div class="valid-feedback">
+                    Title of Recipe Looks good!
+                  </div>
+            </div><br>
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Description</label>
+                <textarea rows="4"  name="listing[description]"class="form-control" required id="inputAddress"><%=listing.description%></textarea>
+                <div class="invalid-feedback">
+                    Description is required!
+                  </div>
+
+            </div><br>
+
+            <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Ingredients</label>
+            <input type="text"  value="<%=listing.ingredients%>" name="listing[ingredients]" class="form-control" id="inputPassword4" required>
+            <div class="invalid-feedback">
+                At least one ingredient is required.
+            </div>
+        </div><br>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Country of Recipe</label>
+                <input type="text"  value="<%=listing.country_of_recipe %>" name="listing[country_of_recipe]" class="form-control" id="inputEmail4" required>
+                <div class="invalid-feedback">
+                    Please provide valid country name!
+                </div>
+            </div><br>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Category</label>
+                <input type="text" name="listing[category]"  value="<%=listing.category%>" class="form-control" id="inputPassword4" required>
+                <div class="invalid-feedback">
+                    Please provide valid category of recipe.
+                </div>
+            </div><br>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Cooking time</label>
+                <input type="text"  value="<%=listing.cooking_time%>" name="listing[cooking_time]" class="form-control" id="inputPassword4" required>
+                <div class="invalid-feedback">
+                    Please give valid cooking time!
+                </div>
+
+            </div><br>
+            <div class="col-12">
+            <label for="inputAddress" class="form-label">Instructions</label>
+            <textarea rows="4" required name="listing[instructions]" class="form-control" id="inputAddress"><%=listing.instructions%></textarea>
+            <div class="invalid-feedback">
+                At least 3 instructions are required
+            </div>    
+        </div><br>
+        
+            <div class="col-12">
+            <label for="inputAddress2" class="form-label">Image</label>
+            <input type="file" required  name="listing[image]" class="form-control" id="inputAddress2">
+            <div class="invalid-feedback">
+                invalid image url
+            </div>
+            </div>
+            <div class="col-12">
+                <span>Original Recipe Image</span><br>
+                <img src="<%=listing.image.url%>" style="height: 180px; width: 270px;" alt="listing preview image">
+            </div><br>
+
+            <div class="col-12">
+            <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+    </div>    
+
+</body>
+</html>

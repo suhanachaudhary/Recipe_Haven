@@ -1,0 +1,75 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+    <div class="container mt-4 mb-4">
+        <h2>Add New Recipe</h2>
+
+        <form class="row g-3 needs-validation" action="/listings" method="post" novalidate enctype="multipart/form-data">
+
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Title</label>
+                <input type="text" name="listing[title]" class="form-control" id="inputAddress" placeholder="Title of recipe" required>
+
+                <div class="valid-feedback">
+                    Title of Recipe Looks good!
+                  </div>
+            </div><br>
+
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">Description</label>
+                <textarea rows="4"  name="listing[description]" class="form-control" required id="inputAddress"></textarea>
+
+                <div class="invalid-feedback">
+                    Description is required!
+                  </div>
+            </div><br>
+
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Cooking time</label>
+                <input type="text" name="listing[cooking_time]" class="form-control" id="inputPassword4" required>
+                <div class="invalid-feedback">
+                    Please give valid cooking time!
+                </div>
+            </div><br>
+            <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Ingredients</label>
+            <input type="text"  name="listing[ingredients]" class="form-control" id="inputPassword4" required>
+
+            <div class="invalid-feedback">
+                At least one ingredient is required.
+            </div>
+            </div><br>
+            <div class="col-md-6">
+                <label for="inputEmail4" class="form-label">Country of Recipe</label>
+                <input type="text" name="listing[country_of_recipe]" class="form-control" id="inputEmail4" required>
+                <div class="invalid-feedback">
+                    Please provide valid country name!
+                </div>
+            </div><br>
+            <div class="col-md-6">
+                <label for="inputPassword4" class="form-label">Category</label>
+                <input type="text" name="listing[category]" class="form-control" id="inputPassword4" required>
+                <div class="invalid-feedback">
+                    Please provide valid category of recipe.
+                </div>
+            </div><br>
+          
+            <div class="col-12">
+            <label for="inputAddress" class="form-label">Instructions</label>
+            <textarea rows="4" name="listing[instructions]" class="form-control" id="inputAddress" placeholder="How I cook" required></textarea>
+            <div class="invalid-feedback">
+                At least 3 instructions are required
+            </div>
+            </div><br>
+            <div class="col-12">
+            <label for="inputAddress2" class="form-label">Image</label>
+            <input type="file" name="listing[image]" class="form-control" id="inputAddress2" required>
+            </div><br>
+
+            <div class="col-12">
+            <button type="submit" class="btn btn-primary">Add</button>
+            </div>
+        </form>
+    </div>    
+
+</body>
+</html>

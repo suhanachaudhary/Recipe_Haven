@@ -1,0 +1,101 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container">
+    <div class="show-page-title">
+        <h2 class="mt-3"><%= listing.title %></h2>
+    </div>    
+    <div class="show">
+        <div class="image left row row-cols-lg-1 row-cols-md-1 row-cols-sm-1">
+            <img src="<%= listing.image.url %>"/>
+        </div>
+        <div class="right">
+            <span style="font-size: 1.1rem;"><b style="color:#4f8ce8">Owned by:&nbsp;</b><i><%= listing.owner.username %></i></span><br>
+            <span><b>Description:</b> <%= listing.description %></span><br><br>
+            <span><b>Recipe Country:</b> <%= listing.country_of_recipe %></span><br><br>
+            <span><b>Recipe Category:</b> <%= listing.category %></span><br><br>
+            <span><b>Cooking Time:</b> <%= listing.cooking_time %></span><br><br>
+
+            <span><strong>Ingredients:</strong></span>
+            <ul>
+                <% if (listing.ingredients && listing.ingredients.length > 0) { %>
+                    <% listing.ingredients.forEach(function(ingredient) { %>
+                        <li><%= ingredient %></li>
+                    <% }); %>
+                <% } else { %>
+                    <li>No ingredients available.</li>
+                <% } %>
+            </ul>
+        </div> 
+    </div>   
+    <br>
+    <span style="margin: 20px 0 20px 0; color:#4f8ce8;font-size: 1.4rem;"><strong>Instructions:</strong></span>
+    <ul>
+        <% if (listing.instructions && Array.isArray(listing.instructions) && listing.instructions.length > 0) { %>
+            <% listing.instructions.forEach(function(instruction) { %>
+               <br> <li><%= instruction %></li>
+            <% }); %>
+        <% } else { %>
+            <li>No instructions available.</li>
+        <% } %>
+    </ul>
+    <br>
+
+    <% if(currUser && currUser._id.equals(listing.owner._id)){ %>
+    <div style="display: flex; justify-content: left; align-items: center; margin: 10px; flex-direction: row;">
+        <a href="/listings/<%=listing._id%>/edit" class="btn">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;
+        <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
+            <button class="btn">Delete</button>
+        </form>
+    </div>
+    <% } %>
+
+    <!-- comments div -->
+   
+    <div>
+        <hr>
+        <% if(currUser){%>
+            <form action="/listings/<%=listing._id %>/reviews" method="post" novalidate class="needs-validation">
+                <h3>Add Comments</h3>
+                <div class="col-12">
+                    <textarea rows="4" name="comment" class="form-control" id="inputAddress" placeholder="Share your Comments and Feedback" required></textarea>
+                    <div class="invalid-feedback">Please add some reviews for comments!</div>
+                </div><br>
+
+                <div class="ratingstar">
+                    <span style="margin: 0 0 30px 0; color:#4f8ce8;font-size: 1.4rem;"><strong>Recipe Rating: </strong></span>&nbsp;&nbsp;
+                    <fieldset class="starability-checkmark">
+                        <input type="radio" id="no-rate" class="input-no-rate" name="rating" value="1" checked aria-label="No rating." />
+                        <input type="radio" id="first-rate1" name="rating" value="1" />
+                        <label for="first-rate1" title="Terrible">1 star</label>
+                        <input type="radio" id="first-rate2" name="rating" value="2" />
+                        <label for="first-rate2" title="Not good">2 stars</label>
+                        <input type="radio" id="first-rate3" name="rating" value="3" />
+                        <label for="first-rate3" title="Average">3 stars</label>
+                        <input type="radio" id="first-rate4" name="rating" value="4" />
+                        <label for="first-rate4" title="Very good">4 stars</label>
+                        <input type="radio" id="first-rate5" name="rating" value="5" />
+                        <label for="first-rate5" title="Amazing">5 stars</label>
+                    </fieldset>
+                </div>
+                <button class="btn btn-success">Comment</button>
+            </form>
+        <% } %>
+        <br>
+        <h3>See the comments</h3>
+        <hr>
+        <ul style="list-style: none;">
+            <% for(let review of listing.reviews) { %>
+                <div style="display: flex;align-items: center;justify-content: left;height: 220px;width: 2px;border: 2px solid #7C00FE ; position: absolute;"></div>
+                
+                <li style="margin-left: 10px;"><h4>@<%= review.author.username %></h4></li>
+                <li style="margin-left: 10px;">
+                    <p class="starability-result" data-rating="<%=review.rating%>"></p>
+                </li>
+                <li style="margin-left: 10px;"><%= review.comment %></li><br>
+                <form action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+                    <button  style="margin-left: 10px;" class="btn btn-dark">Delete</button>
+                </form><br><br><br>
+            <% } %>
+        </ul>
+    </div>
+</div>
