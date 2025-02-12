@@ -21,7 +21,7 @@
         
     </div>
 
-    <div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1">
+    
         <% for(let listing of allListing){%>
                 <div class="card col">
                     <a href="/listings/<%=listing._id%>">
@@ -32,7 +32,7 @@
                             <br>
                             <a href="#" class="btn btn-primary mt-3">Get Details</a>
                         </div>
-                    </a>
+                    </a><div class="row row-cols-lg-2 row-cols-md-1 row-cols-sm-1">
                 </div>
             
         <%}%>
