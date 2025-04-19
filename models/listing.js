@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 const Schema=mongoose.Schema;
 const Review=require("./reviews.js");
@@ -44,8 +45,19 @@ const ListingSchema = new mongoose.Schema(
     owner:{
       type:Schema.Types.ObjectId,
       ref:"User",
-    }
-
+    },
+    likes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      }
+    ],
+    dislikes: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+      }
+    ],
   },
   { timestamps: true } // Automatically adds createdAt and updatedAt fields
 );
