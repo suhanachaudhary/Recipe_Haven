@@ -1,4 +1,4 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+
 (function () {
     'use strict'
   
@@ -20,93 +20,90 @@
   })()
 
 
-  // Function to handle search
-  function searchDestination(event) {
-    event.preventDefault(); 
-
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase(); // Get the search input and convert to lowercase
-    const cards = document.querySelectorAll('.card'); 
-    console.log(cards);
-    console.log('Search term:', searchTerm);
-
-    cards.forEach(card => {
-        const titleElement = card.querySelector('.card-title');
-        
-        if (titleElement) {
-          const title = titleElement.innerText.toLowerCase(); 
-          console.log('Card Title:', title);  
-            if (title.includes(searchTerm)) {
-              console.log("yes")
-                card.style.display = 'block'; 
-            } else {
-              console.log("no")
-                card.style.display = 'none'; 
-            }
-          }
-          else {
-            console.log('Card title not found for this card:', card);
-        }       
-    });
-}
-
-
-// Function to handle search
-function searchDestination(event) {
-  event.preventDefault(); 
-
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase(); // Get the search input and convert to lowercase
-  const cards = document.querySelectorAll('.card'); 
-  console.log(cards);
-  console.log('Search term:', searchTerm);
-
-  cards.forEach(card => {
-      const titleElement = card.querySelector('.card-title');
-      
-      if (titleElement) {
-        const title = titleElement.innerText.toLowerCase(); 
-        console.log('Card Title:', title);  
-          if (title.includes(searchTerm)) {
-            console.log("yes")
-              card.style.display = 'block'; 
-          } else {
-            console.log("no")
-              card.style.display = 'none'; 
-          }
-        }
-        else {
-          console.log('Card title not found for this card:', card);
-      }       
-  });
-}
-
 //search recipe
 
-function searchDestination(event) {
-  event.preventDefault();
+let recognition;
 
-  const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-  const cards = document.querySelectorAll('.card');
-  const noResultsMessage = document.getElementById('noResultsMessage');
-  let hasVisibleCards = false;
+  if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
 
-  cards.forEach(card => {
-    const titleElement = card.querySelector('.card-title');
+    recognition.onresult = function(event) {
+      const transcript = event.results[0][0].transcript;
+      document.getElementById('searchInput').value = transcript;
+      
+      // Call searchDestination manually after voice input
+      searchDestination(new Event('submit'));
+    };
 
-    if (titleElement) {
-      const title = titleElement.innerText.toLowerCase();
+    recognition.onerror = function(event) {
+      alert('Voice recognition error: ' + event.error);
+    };
+  } else {
+    alert('Your browser does not support voice recognition. Please use Chrome.');
+  }
 
-      if (title.includes(searchTerm)) {
-        card.style.display = 'block';
-        hasVisibleCards = true;
-      } else {
-        card.style.display = 'none';
-      }
+  function startListening() {
+    if (recognition) {
+      recognition.start();
     }
-  });
+  }
 
-  // Display "Recipe not found" message if no cards are visible
-  noResultsMessage.style.display = hasVisibleCards ? 'none' : 'block';
-}
+  function searchDestination(event) {
+    event.preventDefault();
+
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    const noResultsMessage = document.getElementById('noResultsMessage');
+    let hasVisibleCards = false;
+
+    cards.forEach(card => {
+      const titleElement = card.querySelector('.card-title');
+
+      if (titleElement) {
+        const title = titleElement.innerText.toLowerCase();
+
+        if (title.includes(searchTerm)) {
+          card.style.display = 'block';
+          hasVisibleCards = true;
+        } else {
+          card.style.display = 'none';
+        }
+      }
+    });
+
+    // Display "Recipe not found" message if no cards are visible
+    noResultsMessage.style.display = hasVisibleCards ? 'none' : 'block';
+  }
+
+// function searchDestination(event) {
+//   event.preventDefault();
+
+//   const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+//   const cards = document.querySelectorAll('.card');
+//   const noResultsMessage = document.getElementById('noResultsMessage');
+//   let hasVisibleCards = false;
+
+//   cards.forEach(card => {
+//     const titleElement = card.querySelector('.card-title');
+
+//     if (titleElement) {
+//       const title = titleElement.innerText.toLowerCase();
+
+//       if (title.includes(searchTerm)) {
+//         card.style.display = 'block';
+//         hasVisibleCards = true;
+//       } else {
+//         card.style.display = 'none';
+//       }
+//     }
+//   });
+
+//   // Display "Recipe not found" message if no cards are visible
+//   noResultsMessage.style.display = hasVisibleCards ? 'none' : 'block';
+// }
 
 // home page slider 
 let next=document.querySelector(".next");

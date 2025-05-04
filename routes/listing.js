@@ -1,3 +1,4 @@
+
 const express=require("express");
 const router=express.Router();
 const { isLoggedIn ,validateListing, isOwner }=require("../middleware.js");
@@ -77,6 +78,15 @@ router.post("/:id/like", isLoggedIn, async (req, res) => {
   
     await listing.save();
     res.json({ likes: listing.likes.length, dislikes: listing.dislikes.length });
+  });
+  
+
+router.get('/search', async (req, res) => {
+    const query = req.query.query;
+    const recipes = await Listing.find({
+      title: { $regex: query, $options: 'i' }
+    });
+    res.render('searchresults', { recipes });
   });
   
 
