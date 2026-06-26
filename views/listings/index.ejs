@@ -1,159 +1,295 @@
-
 <% layout("/layouts/boilerplate") %>
 
-<style>
+<!-- ── Page Header ───────────────────────────────────────────── -->
+<div class="index-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-compass me-2"></i>Explore Recipes</h1>
+    <p>Discover thousands of delicious recipes from every cuisine</p>
+  </div>
+</div>
 
-    .like-icon{
-        color:#3A59D1;
-    }
-    .dislike-icon{
-        color:red;
-    }
+<div class="container">
 
-    .like-icon,
-    .dislike-icon {
-        font-size: 1.7rem;
-        cursor: pointer;
-        transition: transform 0.2s ease, color 0.2s ease;
-    }
+  <!-- ── Filter Panel ─────────────────────────────────────────── -->
+  <div class="filter-panel" id="filterForm">
+    <form method="GET" action="/listings">
+      <div class="row g-3 align-items-end">
 
-    .like-icon.text-primary:hover,
-    .dislike-icon.text-danger:hover {
-        transform: scale(1.2);
-        filter: drop-shadow(0 0 6px rgba(6, 102, 204, 0.6));
-    }
-
-    /* Pulse animation */
-    .pulse {
-        animation: pulseEffect 0.4s ease;
-    }
-
-    @keyframes pulseEffect {
-        0% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.3);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-    .pulse {
-        animation: pulseEffect 0.4s ease;
-        filter: drop-shadow(0 0 8px rgba(0, 123, 255, 0.7));
-    }
-    
-</style>
-
-<body>
-    <div class="container search">
-        <form class="d-flex" role="search" onsubmit="searchDestination(event)">
-            <input class="form-control me-2" type="search" id="searchInput" placeholder="Search with title of recipe">
-            <button class="btn searhbtn" type="submit">Search</button>
-
-            <button class="btn-warning" style="background-color:#FFD18E;margin-left: 2px;border-radius: 50%;height: 50px;width: 50px;" type="button" onclick="startListening()">
-                🎤
+        <!-- Search -->
+        <div class="col-md-4">
+          <label class="form-label"><i class="fa-solid fa-magnifying-glass me-1"></i> Search</label>
+          <div style="position:relative;">
+            <input class="form-control" type="search" name="q" id="searchInput"
+              placeholder="Search recipes or ingredients…"
+              value="<%= filters.q || '' %>"
+              style="padding-right:40px;">
+            <button type="button" onclick="startListening()" title="Voice search"
+              style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--grey);cursor:pointer;font-size:1rem;">
+              🎤
             </button>
-        </form>
-
-        <div class="row mt-3 error" id="noResultsMessage" style="display: none;">
-            <div class="alert alert-warning col-6 offset-3" role="alert">
-                <h1 style="text-align: center;">☹☹</h1>
-                <h4 style="text-align: center;">Recipe not found</h4>
-            </div>
+          </div>
         </div>
+
+        <!-- Category -->
+        <div class="col-md-2">
+          <label class="form-label"><i class="fa-solid fa-tag me-1"></i> Category</label>
+          <input class="form-control" type="text" name="category"
+            placeholder="e.g. Breakfast"
+            value="<%= filters.category || '' %>">
+        </div>
+
+        <!-- Diet -->
+        <div class="col-md-2">
+          <label class="form-label"><i class="fa-solid fa-leaf me-1"></i> Diet</label>
+          <select class="form-select" name="diet">
+            <option value="">All Types</option>
+            <option value="vegetarian"    <%= filters.diet === 'vegetarian'     ? 'selected' : '' %>>Vegetarian</option>
+            <option value="non-vegetarian"<%= filters.diet === 'non-vegetarian' ? 'selected' : '' %>>Non-Vegetarian</option>
+            <option value="vegan"         <%= filters.diet === 'vegan'          ? 'selected' : '' %>>Vegan</option>
+          </select>
+        </div>
+
+        <!-- Max Time -->
+        <div class="col-md-2">
+          <label class="form-label"><i class="fa-solid fa-clock me-1"></i> Cook Time</label>
+          <select class="form-select" name="maxTime">
+            <option value="">Any Time</option>
+            <option value="15" <%= filters.maxTime == '15' ? 'selected' : '' %>>Under 15 mins</option>
+            <option value="30" <%= filters.maxTime == '30' ? 'selected' : '' %>>Under 30 mins</option>
+            <option value="60" <%= filters.maxTime == '60' ? 'selected' : '' %>>Under 60 mins</option>
+          </select>
+        </div>
+
+        <!-- Actions -->
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-primary flex-fill" type="submit">
+            <i class="fa-solid fa-filter"></i> Filter
+          </button>
+          <a class="btn btn-outline-secondary" href="/listings" title="Reset filters">
+            <i class="fa-solid fa-rotate-left"></i>
+          </a>
+        </div>
+
+      </div>
+
+      <!-- Active filter chips -->
+      <% if (filters.q || filters.category || filters.diet || filters.maxTime) { %>
+        <div class="d-flex flex-wrap gap-2 mt-3 pt-3" style="border-top:1px solid var(--border);">
+          <span style="font-size:0.78rem;color:var(--grey);font-weight:600;align-self:center;">Active:</span>
+          <% if (filters.q) { %>
+            <span class="badge badge-green">
+              <i class="fa-solid fa-magnifying-glass"></i> "<%= filters.q %>"
+            </span>
+          <% } %>
+          <% if (filters.category) { %>
+            <span class="badge badge-orange">
+              <i class="fa-solid fa-tag"></i> <%= filters.category %>
+            </span>
+          <% } %>
+          <% if (filters.diet) { %>
+            <span class="badge badge-grey">
+              <i class="fa-solid fa-leaf"></i> <%= filters.diet %>
+            </span>
+          <% } %>
+          <% if (filters.maxTime) { %>
+            <span class="badge badge-grey">
+              <i class="fa-solid fa-clock"></i> Under <%= filters.maxTime %> mins
+            </span>
+          <% } %>
+        </div>
+      <% } %>
+    </form>
+  </div>
+
+  <!-- Empty State -->
+  <% if (allListing.length === 0) { %>
+    <div class="empty-state">
+      <i class="fa-solid fa-plate-wheat"></i>
+      <h4>No recipes found</h4>
+      <p>Try adjusting your filters or search for something else.</p>
+      <a href="/listings" class="btn btn-primary">
+        <i class="fa-solid fa-rotate-left me-1"></i> Clear Filters
+      </a>
+    </div>
+  <% } %>
+
+  <!-- ── Recipe Grid ───────────────────────────────────────────── -->
+  <% if (allListing.length > 0) { %>
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+      <p style="color:var(--grey);font-size:0.88rem;margin:0;">
+        Showing <strong style="color:var(--dark);"><%= allListing.length %></strong> recipes
+        <% if (totalPages > 1) { %>(page <%= currentPage %> of <%= totalPages %>)<% } %>
+      </p>
     </div>
 
-    <div class="container mt-3">
-        <div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 g-4">
-            <% for(let listing of allListing){ %>
-                <div class="col d-flex">
-                    <div class="card flex-fill">
-                        <a href="/listings/<%=listing._id%>">
-                            <img src="<%=listing.image.url %>" class="card-img-top" alt="recipe image" style="height: 23rem !important;">
-                        </a>
-                        <div class="card-body d-flex flex-column justify-content-between">
-                            <div>
-                                <h5 class="card-title"><b><%= listing.title %></b></h5>
-                                <span class="card-text"><%= listing.description %></span>
-                            </div>
-            
-                            <!-- Like/Dislike Buttons -->
-                            <div class="d-flex justify-content-between align-items-center">
-                                <!-- Get Details Button -->
-                                <a href="/listings/<%= listing._id %>" class="btn btn-primary me-3 mt-2">Get Details</a>
-                              
-                                <!-- Like & Dislike Section -->
-                                <div class="d-flex align-items-center" style="font-size: 1.3rem; font-weight: 600; gap: 1.5rem;">
-                                  
-                                  <!-- Like -->
-                                  <div class="text-center">
-                                    <i class="fa-solid fa-thumbs-up like-icon" onclick="handleLike('<%= listing._id %>', this)" style="cursor: pointer;"></i>
-                                    <span><%= listing.likes.length %></span>
-                                  </div>
-                              
-                                  <!-- Dislike -->
-                                  <div class="text-center">
-                                    <i class="fa-solid fa-thumbs-down dislike-icon" onclick="handleDislike('<%= listing._id %>', this)" style="cursor: pointer;"></i>
-                                    <span><%= listing.dislikes.length %></span>
-                                  </div>
-                                </div>
-                              </div>
-                        </div>
-                    </div>
+    <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-lg-3">
+      <% for (let listing of allListing) { %>
+        <div class="col">
+          <div class="recipe-card">
+
+            <!-- Image -->
+            <div class="recipe-card-img">
+              <a href="/listings/<%= listing._id %>">
+                <img src="<%= listing.image.url %>" alt="<%= listing.title %>" loading="lazy">
+              </a>
+              <div class="recipe-card-overlay"></div>
+
+              <!-- Diet badge -->
+              <div class="recipe-card-badges">
+                <% if (listing.diet) { %>
+                  <span class="diet-badge diet-<%= listing.diet === 'non-vegetarian' ? 'non-vegetarian' : listing.diet %>">
+                    <%= listing.diet === 'vegan' ? '🌱 Vegan' : listing.diet === 'vegetarian' ? '🥗 Veg' : '🍗 Non-Veg' %>
+                  </span>
+                <% } %>
+              </div>
+
+              <!-- Time badge -->
+              <% if (listing.cooking_time) { %>
+                <div class="recipe-time-badge">
+                  <i class="fa-solid fa-clock"></i> <%= listing.cooking_time %>
                 </div>
-            <% } %>
+              <% } %>
+            </div>
+
+            <!-- Card Body -->
+            <div class="recipe-card-body">
+              <!-- Author -->
+              <% if (listing.owner) { %>
+                <div class="recipe-card-author">
+                  <div class="author-avatar-sm">
+                    <%= listing.owner.username ? listing.owner.username.charAt(0).toUpperCase() : '?' %>
+                  </div>
+                  <span class="author-name-sm">@<%= listing.owner.username || 'unknown' %></span>
+                </div>
+              <% } %>
+
+              <a href="/listings/<%= listing._id %>" style="text-decoration:none;">
+                <div class="recipe-card-title"><%= listing.title %></div>
+              </a>
+              <div class="recipe-card-desc"><%= listing.description.substring(0, 90) %>…</div>
+
+              <!-- Stats + Actions -->
+              <div class="recipe-card-meta">
+                <span><i class="fa-solid fa-eye"></i> <%= listing.views || 0 %></span>
+                <span><i class="fa-solid fa-bookmark"></i> <%= (listing.savedBy || []).length %></span>
+                <% if (listing.category) { %>
+                  <span class="badge badge-grey ms-auto" style="font-size:0.68rem;"><%= listing.category %></span>
+                <% } %>
+              </div>
+
+              <!-- Like / Dislike / Detail -->
+              <div class="d-flex align-items-center gap-2 mt-3">
+                <a href="/listings/<%= listing._id %>" class="btn btn-primary btn-sm flex-fill" style="justify-content:center;">
+                  View Recipe
+                </a>
+                <button class="like-btn" onclick="handleLike('<%= listing._id %>', this)" title="Like">
+                  <i class="fa-solid fa-thumbs-up"></i>
+                  <span class="like-count-<%= listing._id %>"><%= listing.likes.length %></span>
+                </button>
+                <button class="dislike-btn" onclick="handleDislike('<%= listing._id %>', this)" title="Dislike">
+                  <i class="fa-solid fa-thumbs-down"></i>
+                  <span class="dislike-count-<%= listing._id %>"><%= listing.dislikes.length %></span>
+                </button>
+              </div>
+            </div>
+
+          </div>
         </div>
-        <div class="w-100"><hr></div>
+      <% } %>
     </div>
 
-    <script>
-    async function handleLike(id, el) {
-        try {
-            const res = await fetch(`/listings/${id}/like`, { method: "POST" });
-            const data = await res.json();
+    <!-- ── Pagination ───────────────────────────────────────────── -->
+    <%
+      function pageLink(p) {
+        const parts = [];
+        if (filters.q)        parts.push('q='        + encodeURIComponent(filters.q));
+        if (filters.category) parts.push('category=' + encodeURIComponent(filters.category));
+        if (filters.diet)     parts.push('diet='     + encodeURIComponent(filters.diet));
+        if (filters.maxTime)  parts.push('maxTime='  + encodeURIComponent(filters.maxTime));
+        parts.push('page=' + p);
+        return '/listings?' + parts.join('&');
+      }
+    %>
+    <% if (totalPages > 1) { %>
+      <nav class="rh-pagination" aria-label="Recipe pages">
+        <% if (currentPage > 1) { %>
+          <a href="<%= pageLink(currentPage - 1) %>" aria-label="Previous">
+            <i class="fa-solid fa-chevron-left"></i>
+          </a>
+        <% } else { %>
+          <span class="disabled"><i class="fa-solid fa-chevron-left"></i></span>
+        <% } %>
 
-            if (!res.ok) {
-                return alert(data.message || "You must be logged in to like.");
-            }
+        <% for (let p = 1; p <= totalPages; p++) { %>
+          <% if (p === currentPage) { %>
+            <span class="active"><%= p %></span>
+          <% } else { %>
+            <a href="<%= pageLink(p) %>"><%= p %></a>
+          <% } %>
+        <% } %>
 
-            // Add pulse animation
-            el.classList.add("pulse");
-            setTimeout(() => el.classList.remove("pulse"), 400);
+        <% if (currentPage < totalPages) { %>
+          <a href="<%= pageLink(currentPage + 1) %>" aria-label="Next">
+            <i class="fa-solid fa-chevron-right"></i>
+          </a>
+        <% } else { %>
+          <span class="disabled"><i class="fa-solid fa-chevron-right"></i></span>
+        <% } %>
+      </nav>
+    <% } %>
 
-            // Update counts
-            el.nextElementSibling.innerText = data.likes;
-            el.closest('.text-center').nextElementSibling.querySelector('span').innerText = data.dislikes;
-        } catch (err) {
-            console.error(err);
-            alert("Something went wrong.");
-        }
-    }
+  <% } %>
 
-    async function handleDislike(id, el) {
-        try {
-            const res = await fetch(`/listings/${id}/dislike`, { method: "POST" });
-            const data = await res.json();
+  <div style="height:40px;"></div>
+</div>
 
-            if (!res.ok) {
-                return alert(data.message || "You must be logged in to dislike.");
-            }
+<script>
+async function handleLike(id, el) {
+  try {
+    const res  = await fetch(`/listings/${id}/like`, { method: 'POST' });
+    const data = await res.json();
+    if (res.status === 401) { rhToast(data.message || 'Please log in to like recipes.', 'warning'); return; }
+    if (!res.ok)            { rhToast(data.message || 'Something went wrong.', 'error');   return; }
+    el.classList.add('pulse');
+    el.style.color = 'var(--primary)';
+    setTimeout(() => el.classList.remove('pulse'), 400);
+    const likeSpan    = document.querySelector(`.like-count-${id}`);
+    const dislikeSpan = document.querySelector(`.dislike-count-${id}`);
+    if (likeSpan)    likeSpan.textContent    = data.likes;
+    if (dislikeSpan) dislikeSpan.textContent = data.dislikes;
+  } catch(err) { console.error(err); }
+}
 
-            // Add pulse animation
-            el.classList.add("pulse");
-            setTimeout(() => el.classList.remove("pulse"), 400);
+async function handleDislike(id, el) {
+  try {
+    const res  = await fetch(`/listings/${id}/dislike`, { method: 'POST' });
+    const data = await res.json();
+    if (res.status === 401) { rhToast(data.message || 'Please log in to react.', 'warning'); return; }
+    if (!res.ok)            { rhToast(data.message || 'Something went wrong.', 'error');     return; }
+    el.classList.add('pulse');
+    el.style.color = 'var(--red)';
+    setTimeout(() => el.classList.remove('pulse'), 400);
+    const likeSpan    = document.querySelector(`.like-count-${id}`);
+    const dislikeSpan = document.querySelector(`.dislike-count-${id}`);
+    if (likeSpan)    likeSpan.textContent    = data.likes;
+    if (dislikeSpan) dislikeSpan.textContent = data.dislikes;
+  } catch(err) { console.error(err); }
+}
 
-            // Update counts
-            el.nextElementSibling.innerText = data.dislikes;
-            el.closest('.text-center').previousElementSibling.querySelector('span').innerText = data.likes;
-        } catch (err) {
-            console.error(err);
-            alert("Something went wrong.");
-        }
-    }
+let recognition;
+if ('webkitSpeechRecognition' in window) {
+  recognition = new webkitSpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+  recognition.onresult = e => {
+    document.getElementById('searchInput').value = e.results[0][0].transcript;
+    document.querySelector('#filterForm form').submit();
+  };
+  recognition.onerror = e => rhToast('Voice recognition error: ' + e.error, 'error');
+}
+function startListening() {
+  if (recognition) recognition.start();
+  else rhToast('Voice search requires Chrome browser.', 'warning');
+}
 </script>
-</body>
-
-
-

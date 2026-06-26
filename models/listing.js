@@ -1,7 +1,6 @@
-
 const mongoose = require("mongoose");
-const Schema=mongoose.Schema;
-const Review=require("./reviews.js");
+const Schema = mongoose.Schema;
+const Review = require("./reviews.js");
 
 const ListingSchema = new mongoose.Schema(
   {
@@ -14,12 +13,12 @@ const ListingSchema = new mongoose.Schema(
       required: true,
     },
     ingredients: {
-      type: [String], // An array of strings
-      required: true, // Assuming ingredients are required
+      type: [String],
+      required: true,
     },
     image: {
-      url:String,
-      filename:String,
+      url: String,
+      filename: String,
     },
     country_of_recipe: {
       type: String,
@@ -29,44 +28,52 @@ const ListingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    cooking_time:{
-        type:String,
-        required:true
+    cooking_time: {
+      type: String,
+      required: true,
+    },
+    diet: {
+      type: String,
+      enum: ['vegetarian', 'non-vegetarian', 'vegan'],
+      default: 'non-vegetarian',
+    },
+    cookingMinutes: {
+      type: Number,
+      default: 0,
     },
     instructions: {
-      type: [String], // An array of strings
-      required: true, // Assuming instructions are required
+      type: [String],
+      required: true,
     },
-
-    //connect review and lsting relationship
     reviews: [
       { type: Schema.Types.ObjectId, ref: "Review" }
     ],
-    owner:{
-      type:Schema.Types.ObjectId,
-      ref:"User",
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     likes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      }
+      { type: Schema.Types.ObjectId, ref: "User" }
     ],
     dislikes: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "User",
-      }
+      { type: Schema.Types.ObjectId, ref: "User" }
+    ],
+    views: {
+      type: Number,
+      default: 0,
+    },
+    savedBy: [
+      { type: Schema.Types.ObjectId, ref: "User" }
     ],
   },
-  { timestamps: true } // Automatically adds createdAt and updatedAt fields
+  { timestamps: true }
 );
 
-ListingSchema.post("findOneAndDelete",async(listing)=>{
-  if(listing){
-    await Review.deleteMany({ _id: {$in:listing.reviews }});
+ListingSchema.post("findOneAndDelete", async (listing) => {
+  if (listing) {
+    await Review.deleteMany({ _id: { $in: listing.reviews } });
   }
-})
+});
 
 const ListingModel = mongoose.model("Listing", ListingSchema);
 module.exports = ListingModel;

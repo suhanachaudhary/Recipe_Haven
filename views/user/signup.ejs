@@ -1,36 +1,135 @@
-
 <% layout("/layouts/boilerplate") %>
 
-<body>
-    <div class="signup-container">
-        <div class="signup col-6">
-            <img src="/images/paneer.png" alt="signpage">
+<div class="auth-page" style="min-height:calc(100vh - 70px);">
+
+  <!-- Left: Food Image -->
+  <div class="auth-left d-none d-md-flex">
+    <img src="/images/paneer.png" alt="Delicious food">
+    <div class="auth-left-overlay"></div>
+    <div class="auth-left-content">
+      <h2>Join Our Food Community</h2>
+      <p>Create your free account and start your culinary journey with thousands of food enthusiasts.</p>
+      <div class="auth-feature">
+        <i class="fa-solid fa-check-circle"></i>
+        <span>Share your own recipes</span>
+      </div>
+      <div class="auth-feature">
+        <i class="fa-solid fa-check-circle"></i>
+        <span>Plan meals for the whole week</span>
+      </div>
+      <div class="auth-feature">
+        <i class="fa-solid fa-check-circle"></i>
+        <span>Build your grocery list automatically</span>
+      </div>
+      <div class="auth-feature">
+        <i class="fa-solid fa-check-circle"></i>
+        <span>Follow and discover new creators</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Signup Form -->
+  <div class="auth-right">
+    <div class="auth-card">
+
+      <a href="/" class="auth-logo">
+        <div class="brand-icon"><i class="fa-solid fa-utensils"></i></div>
+        <span>Recipe Haven</span>
+      </a>
+
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">It's free and takes less than a minute.</p>
+
+      <form class="auth-form needs-validation" action="/signup" method="POST" novalidate>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" name="username" id="username" class="form-control"
+            placeholder="Choose a unique username" required autocomplete="username"
+            pattern="[a-zA-Z0-9_]{3,}" title="3+ characters, letters, numbers and underscores only">
+          <div class="invalid-feedback">Username must be at least 3 characters (letters, numbers, _).</div>
         </div>
 
-        <div class="signup-page">
-            <div class="card">
-                <h3 style="text-align: center;">Join Recipe Haven</h3>
-                <form class="row g-3 needs-validation" action="/signup" method="POST" novalidate>
-                    <div class="col-12">
-                        <label for="inputAddress" class="form-label">Username</label>
-                        <input type="text" name="username" class="form-control" id="inputAddress" required>            
-                    </div><br>
-                    <div class="col-12">
-                        <label for="inputAddress" class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" required id="inputAddress"/>
-                        <div class="invalid-feedback">
-                            Please provide valid Email!
-                        </div>
-                    </div><br>
-                    <div class="col-md-12">
-                    <label for="inputPassword4" class="form-label">Password</label>
-                    <input type="text" name="password" class="form-control" id="inputPassword4" required>
-                    
-                </div><br>
-                <button class="btn btn-success align-item-center">Signup</button>
-                <br>
-                <a href="/login" style="text-align: center;">Alreday have an account. <b>Login here</b></a>
-            </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" name="email" id="email" class="form-control"
+            placeholder="you@example.com" required autocomplete="email">
+          <div class="invalid-feedback">Please provide a valid email address.</div>
         </div>
-    </div>    
-</body>
+
+        <div class="mb-4">
+          <label for="password" class="form-label">Password</label>
+          <div class="password-field">
+            <input type="password" name="password" id="password" class="form-control"
+              placeholder="Choose a strong password" required minlength="6"
+              autocomplete="new-password" oninput="updateStrength(this)"
+              style="padding-right:42px;">
+            <button type="button" class="toggle-pw" onclick="togglePw('password', this)" aria-label="Toggle password">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <div class="pw-strength-bar"><div class="pw-strength-fill" id="pwFill"></div></div>
+          <div class="pw-strength-label" id="pwLabel"></div>
+          <div class="invalid-feedback">Password must be at least 6 characters.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 btn-lg">
+          <i class="fa-solid fa-rocket"></i> Create Account
+        </button>
+
+        <p style="text-align:center;font-size:0.75rem;color:var(--grey);margin-top:14px;margin-bottom:0;">
+          By signing up, you agree to our
+          <a href="/listings/about/privacy" style="color:var(--primary);">Privacy Policy</a>
+        </p>
+
+      </form>
+
+      <div class="auth-divider">already a member?</div>
+
+      <p style="text-align:center;font-size:0.88rem;color:var(--grey);margin:0;">
+        <a href="/login" style="font-weight:700;color:var(--primary);">Log in to your account</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  const icon  = btn.querySelector('i');
+  if (input.type === 'password') {
+    input.type  = 'text';
+    icon.className = 'fa-regular fa-eye-slash';
+  } else {
+    input.type  = 'password';
+    icon.className = 'fa-regular fa-eye';
+  }
+}
+
+function updateStrength(input) {
+  const val   = input.value;
+  const fill  = document.getElementById('pwFill');
+  const label = document.getElementById('pwLabel');
+  let score = 0;
+  if (val.length >= 6)  score++;
+  if (val.length >= 10) score++;
+  if (/[A-Z]/.test(val))   score++;
+  if (/[0-9]/.test(val))   score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const levels = [
+    { width: '0%',   color: '',              text: '' },
+    { width: '20%',  color: 'var(--red)',    text: 'Very Weak' },
+    { width: '40%',  color: 'var(--orange)', text: 'Weak' },
+    { width: '60%',  color: '#FBBF24',       text: 'Fair' },
+    { width: '80%',  color: 'var(--primary)',text: 'Strong' },
+    { width: '100%', color: 'var(--primary-dark)', text: 'Very Strong' },
+  ];
+  const lvl = levels[score] || levels[0];
+  fill.style.width      = lvl.width;
+  fill.style.background = lvl.color;
+  label.textContent     = lvl.text;
+  label.style.color     = lvl.color;
+}
+</script>

@@ -1,0 +1,270 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- Page Header -->
+<div class="grocery-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-basket-shopping me-2"></i>Grocery Lists</h1>
+    <p>Auto-generate shopping lists from your recipes and meal plan</p>
+  </div>
+</div>
+
+<div class="container mb-5">
+
+  <!-- Generate Form -->
+  <div class="info-card mb-4">
+    <div class="card-header-rh">
+      <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i> Generate New Grocery List
+    </div>
+    <div class="card-body-rh">
+      <form action="/grocery/generate" method="POST" id="groceryGenForm">
+        <div class="row g-3">
+
+          <!-- List Name -->
+          <div class="col-md-4">
+            <label class="form-label">List Name</label>
+            <input type="text" name="listName" class="form-control"
+              placeholder="e.g. Week 1 Shopping, Weekend BBQ…">
+          </div>
+
+          <!-- Recipe Picker -->
+          <div class="col-md-5">
+            <label class="form-label d-flex align-items-center justify-content-between">
+              <span>Select Recipes to Include</span>
+              <span class="rp-count" id="rpCountLabel">0 selected</span>
+            </label>
+
+            <!-- Search -->
+            <div class="rp-search-wrap">
+              <i class="fa-solid fa-magnifying-glass rp-search-icon"></i>
+              <input type="text" class="rp-search-input" id="rpSearch"
+                placeholder="Search recipes…" autocomplete="off">
+            </div>
+
+            <!-- Chip Grid -->
+            <div class="rp-grid" id="rpGrid">
+              <% if (allRecipes.length === 0) { %>
+                <span class="rp-empty-msg">No recipes found. Add some recipes first!</span>
+              <% } %>
+              <% for (let r of allRecipes) { %>
+                <label class="rp-chip" data-id="<%= r._id %>" data-title="<%= r.title.toLowerCase() %>">
+                  <img src="<%= r.image ? r.image.url : '/images/samosa.png' %>"
+                       alt="<%= r.title %>" onerror="this.style.display='none'">
+                  <i class="fa-solid fa-check rp-check"></i>
+                  <%= r.title %>
+                  <input type="checkbox" name="recipeIds" value="<%= r._id %>"
+                    style="display:none;" class="rp-hidden-cb">
+                </label>
+              <% } %>
+            </div>
+
+            <!-- Footer: clear / select all -->
+            <div class="rp-footer">
+              <span style="color:var(--grey);font-size:0.72rem;">
+                <i class="fa-solid fa-circle-info me-1" style="color:var(--primary);"></i>
+                Click chips to select
+              </span>
+              <div class="rp-actions">
+                <button type="button" onclick="rpSelectAll()">Select All</button>
+                <button type="button" onclick="rpClearAll()">Clear</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="col-md-3 d-flex flex-column gap-2 justify-content-end">
+            <button type="submit" name="fromMealPlan" value="false" class="btn btn-primary">
+              <i class="fa-solid fa-list-check"></i> Generate from Recipes
+            </button>
+            <button type="submit" name="fromMealPlan" value="true" class="btn btn-outline-success">
+              <i class="fa-solid fa-calendar-week"></i> From Meal Plan
+            </button>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <% if (lists.length === 0) { %>
+    <div class="empty-state">
+      <i class="fa-solid fa-basket-shopping"></i>
+      <h4>No grocery lists yet</h4>
+      <p>Generate a list from your saved recipes or import from your meal plan above.</p>
+      <a href="/mealplan" class="btn btn-outline-primary">
+        <i class="fa-solid fa-calendar-week"></i> Plan Meals First
+      </a>
+    </div>
+  <% } %>
+
+  <!-- Grocery Lists Grid -->
+  <% if (lists.length > 0) { %>
+    <h4 class="mb-3">
+      <i class="fa-solid fa-list-check me-2" style="color:var(--primary);"></i>
+      Your Lists (<%= lists.length %>)
+    </h4>
+    <div class="row g-4">
+      <% for (let list of lists) { %>
+        <%
+          const checked = list.items.filter(i => i.checked).length;
+          const total   = list.items.length;
+          const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+        %>
+        <div class="col-md-6">
+          <div class="grocery-card">
+            <div class="grocery-card-header">
+              <div class="d-flex align-items-center gap-2 flex-fill">
+                <i class="fa-solid fa-list-check"></i>
+                <span><%= list.name %></span>
+                <span style="font-size:0.72rem;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:999px;margin-left:4px;">
+                  <%= checked %>/<%= total %>
+                </span>
+              </div>
+              <form id="delGrocery_<%= list._id %>" action="/grocery/<%= list._id %>/delete" method="POST" class="d-inline">
+                <button type="button" class="btn btn-sm"
+                  style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:4px 10px;font-size:0.8rem;cursor:pointer;"
+                  onclick="confirmDeleteGrocery('<%= list._id %>')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </form>
+            </div>
+            <div class="grocery-card-body">
+              <!-- Progress -->
+              <div class="d-flex justify-content-between mb-1" style="font-size:0.78rem;color:var(--grey);">
+                <span><%= checked %> of <%= total %> items checked</span>
+                <span style="font-weight:600;color:var(--primary);"><%= percent %>%</span>
+              </div>
+              <div class="grocery-progress">
+                <div class="grocery-progress-fill" style="width:<%= percent %>%;"></div>
+              </div>
+
+              <!-- Source Recipes -->
+              <% if (list.recipes && list.recipes.length > 0) { %>
+                <p style="font-size:0.78rem;color:var(--grey);margin-bottom:12px;">
+                  <i class="fa-solid fa-utensils me-1" style="color:var(--primary);"></i>
+                  From: <strong><%= list.recipes.map(r => r.title).join(', ') %></strong>
+                </p>
+              <% } %>
+
+              <!-- Items -->
+              <div style="max-height:280px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--primary) transparent;">
+                <% for (let item of list.items) { %>
+                  <div class="grocery-item <%= item.checked ? 'checked' : '' %>" id="item-row-<%= item._id %>">
+                    <input type="checkbox"
+                      <%= item.checked ? 'checked' : '' %>
+                      onchange="toggleItem('<%= list._id %>', '<%= item._id %>', this)">
+                    <span id="label-<%= item._id %>" style="font-size:0.88rem;flex:1;">
+                      <%= item.ingredient %>
+                    </span>
+                  </div>
+                <% } %>
+              </div>
+
+              <% if (percent === 100) { %>
+                <div style="text-align:center;padding:10px 0 0;font-size:0.82rem;color:var(--primary);font-weight:600;">
+                  <i class="fa-solid fa-circle-check"></i> All items checked! Happy shopping!
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+</div>
+
+<script>
+/* ── Recipe Picker ───────────────────────────────────── */
+var rpChips = Array.from(document.querySelectorAll('.rp-chip'));
+
+rpChips.forEach(function(chip) {
+  chip.addEventListener('click', function() {
+    var cb = chip.querySelector('.rp-hidden-cb');
+    cb.checked = !cb.checked;
+    chip.classList.toggle('selected', cb.checked);
+    rpUpdateCount();
+  });
+});
+
+function rpUpdateCount() {
+  var n = rpChips.filter(function(c) { return c.classList.contains('selected'); }).length;
+  var label = document.getElementById('rpCountLabel');
+  if (label) label.textContent = n === 0 ? '0 selected' : n + ' selected';
+}
+
+function rpSelectAll() {
+  rpChips.forEach(function(chip) {
+    if (chip.style.display !== 'none') {
+      chip.classList.add('selected');
+      chip.querySelector('.rp-hidden-cb').checked = true;
+    }
+  });
+  rpUpdateCount();
+}
+
+function rpClearAll() {
+  rpChips.forEach(function(chip) {
+    chip.classList.remove('selected');
+    chip.querySelector('.rp-hidden-cb').checked = false;
+  });
+  rpUpdateCount();
+}
+
+/* ── Search filter ───────────────────────────────────── */
+document.getElementById('rpSearch').addEventListener('input', function() {
+  var q = this.value.toLowerCase().trim();
+  var visibleCount = 0;
+  rpChips.forEach(function(chip) {
+    var match = !q || chip.dataset.title.includes(q);
+    chip.style.display = match ? '' : 'none';
+    if (match) visibleCount++;
+  });
+  var empty = document.getElementById('rpEmptyMsg');
+  if (visibleCount === 0 && !empty) {
+    var msg = document.createElement('span');
+    msg.id = 'rpEmptyMsg';
+    msg.className = 'rp-empty-msg';
+    msg.textContent = 'No recipes match "' + this.value + '"';
+    document.getElementById('rpGrid').appendChild(msg);
+  } else if (visibleCount > 0 && empty) {
+    empty.remove();
+  }
+});
+
+/* ── Grocery item toggle ─────────────────────────────── */
+async function toggleItem(listId, itemId, checkbox) {
+  try {
+    const res  = await fetch(`/grocery/${listId}/item/${itemId}/toggle`, { method: 'POST' });
+    const data = await res.json();
+    if (!res.ok) { checkbox.checked = !checkbox.checked; return; }
+    const label = document.getElementById(`label-${itemId}`);
+    const row   = document.getElementById(`item-row-${itemId}`);
+    if (data.checked) {
+      label.style.textDecoration = 'line-through';
+      label.style.color = 'var(--grey)';
+      row.classList.add('checked');
+      checkbox.checked = true;
+    } else {
+      label.style.textDecoration = 'none';
+      label.style.color = '';
+      row.classList.remove('checked');
+      checkbox.checked = false;
+    }
+  } catch(err) {
+    console.error(err);
+    checkbox.checked = !checkbox.checked;
+  }
+}
+
+async function confirmDeleteGrocery(listId) {
+  const ok = await rhConfirm({
+    icon:        '🛒',
+    title:       'Delete grocery list?',
+    message:     'This grocery list and all its items will be permanently deleted.',
+    confirmText: 'Yes, Delete',
+    confirmType: 'danger',
+  });
+  if (ok) document.getElementById('delGrocery_' + listId).submit();
+}
+</script>

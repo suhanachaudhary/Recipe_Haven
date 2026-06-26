@@ -1,20 +1,716 @@
-<body>
-    <div class="foot">
-        <div class="left">
-            <h2>Stay in Touch</h2>
-            <p>Please subscribe to our newsletter to get the latest news in your domain of interest. Don't forget to follow us on social networks!</p>
-            <div class="social-links">
-                <a href=""><i class="fa-brands fa-square-twitter"></i></a>
-                <a href=""><i class="fa-brands fa-square-instagram"></i></a>
-                <a href=""><i class="fa-brands fa-facebook"></i></a>
-                <a href=""><i class="fa-brands fa-linkedin"></i></a>
-            </div>
-        </div>
-        <div class="right">
-            <input class="form-control" type="text" style="height: 40px;" placeholder="Subscribe our newsletter">
-            <div class="d-grid mt-3"><button class="btn-primary" style="height: 40px;">Subscribe</button></div>
-        </div><br>
-    </div>
-    <p style="text-align: center;">&copy; 2024 Recipe Haven</p>
+<!-- ═══════════════════════════════════════════════════════════
+     RECIPE HAVEN — FOOTER
+     ═══════════════════════════════════════════════════════════ -->
 
-</body>
+<!-- Pre-footer CTA Strip -->
+<div class="footer-cta-strip">
+  <div class="container">
+    <div class="footer-cta-inner">
+      <div>
+        <h3>Ready to cook something amazing?</h3>
+        <p>Join thousands of home cooks sharing and discovering recipes every day.</p>
+      </div>
+      <div class="footer-cta-btns">
+        <% if (typeof currUser==='undefined' || !currUser) { %>
+          <a href="/signup" class="btn btn-primary">
+            <i class="fa-solid fa-rocket me-2"></i>Get Started Free
+          </a>
+          <a href="/listings" class="btn btn-cta-outline">
+            <i class="fa-solid fa-compass me-2"></i>Browse Recipes
+          </a>
+          <% } else { %>
+            <a href="/listings/new" class="btn btn-primary">
+              <i class="fa-solid fa-plus me-2"></i>Share a Recipe
+            </a>
+            <a href="/listings" class="btn btn-cta-outline">
+              <i class="fa-solid fa-compass me-2"></i>Explore Recipes
+            </a>
+            <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="rh-footer" role="contentinfo">
+  <div class="container">
+    <div class="row g-5 pb-5">
+
+      <!-- ── Column 1 : Brand ─────────────────────────────────── -->
+      <div class="col-xl-4 col-lg-4 col-md-6">
+        <a href="/" class="footer-logo" aria-label="Recipe Haven home">
+          <div class="footer-brand-icon">
+            <i class="fa-solid fa-utensils"></i>
+          </div>
+          <span>Recipe <em>Haven</em></span>
+        </a>
+
+        <p class="footer-tagline">
+          Your ultimate destination for discovering, sharing, and enjoying
+          delicious recipes from around the world — made with love.
+        </p>
+
+        <!-- Social links -->
+        <div class="footer-social" role="list" aria-label="Social media links">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on X / Twitter"
+            role="listitem" title="Twitter / X">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Instagram"
+            role="listitem" title="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Facebook"
+            role="listitem" title="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on Pinterest"
+            role="listitem" title="Pinterest">
+            <i class="fa-brands fa-pinterest-p"></i>
+          </a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="Follow us on YouTube"
+            role="listitem" title="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+        </div>
+
+        <!-- Quick stats chips -->
+        <div class="footer-stats">
+          <div class="footer-stat-chip">
+            <i class="fa-solid fa-book-open"></i>
+            <span>500+ Recipes</span>
+          </div>
+          <div class="footer-stat-chip">
+            <i class="fa-solid fa-users"></i>
+            <span>10K+ Cooks</span>
+          </div>
+          <div class="footer-stat-chip">
+            <i class="fa-solid fa-globe"></i>
+            <span>50+ Cuisines</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Column 2 : Explore ───────────────────────────────── -->
+      <div class="col-xl-2 col-lg-2 col-md-3 col-6">
+        <h5 class="footer-heading">Explore</h5>
+        <ul class="footer-links">
+          <li>
+            <a href="/listings">
+              <i class="fa-solid fa-compass"></i> All Recipes
+            </a>
+          </li>
+          <li>
+            <a href="/listings?category=Breakfast">
+              <i class="fa-solid fa-mug-hot"></i> Breakfast
+            </a>
+          </li>
+          <li>
+            <a href="/listings?category=Lunch">
+              <i class="fa-solid fa-bowl-food"></i> Lunch
+            </a>
+          </li>
+          <li>
+            <a href="/listings?category=Dinner">
+              <i class="fa-solid fa-utensils"></i> Dinner
+            </a>
+          </li>
+          <li>
+            <a href="/listings?category=Dessert">
+              <i class="fa-solid fa-cake-candles"></i> Desserts
+            </a>
+          </li>
+          <li>
+            <a href="/listings?category=Snacks">
+              <i class="fa-solid fa-apple-whole"></i> Snacks
+            </a>
+          </li>
+          <li>
+            <a href="/listings?diet=vegan">
+              <i class="fa-solid fa-leaf"></i> Vegan
+            </a>
+          </li>
+          <li>
+            <a href="/listings?diet=vegetarian">
+              <i class="fa-solid fa-seedling"></i> Vegetarian
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ── Column 3 : Community ─────────────────────────────── -->
+      <div class="col-xl-2 col-lg-2 col-md-3 col-6">
+        <h5 class="footer-heading">Community</h5>
+        <ul class="footer-links">
+          <li>
+            <a href="/listings/new">
+              <i class="fa-solid fa-plus-circle"></i> Share Recipe
+            </a>
+          </li>
+          <li>
+            <a href="/mealplan">
+              <i class="fa-solid fa-calendar-week"></i> Meal Planner
+            </a>
+          </li>
+          <li>
+            <a href="/grocery">
+              <i class="fa-solid fa-basket-shopping"></i> Grocery List
+            </a>
+          </li>
+          <% if (typeof currUser==='undefined' || !currUser) { %>
+            <li>
+              <a href="/signup">
+                <i class="fa-solid fa-user-plus"></i> Join Us
+              </a>
+            </li>
+            <li>
+              <a href="/login">
+                <i class="fa-solid fa-right-to-bracket"></i> Log In
+              </a>
+            </li>
+            <% } else { %>
+              <li>
+                <a href="/profile/<%= currUser.username %>">
+                  <i class="fa-solid fa-user"></i> My Profile
+                </a>
+              </li>
+              <% } %>
+                <li>
+                  <a href="/listings/about">
+                    <i class="fa-solid fa-circle-info"></i> About Us
+                  </a>
+                </li>
+                <li>
+                  <a href="/listings/about/privacy">
+                    <i class="fa-solid fa-shield-halved"></i> Privacy Policy
+                  </a>
+                </li>
+        </ul>
+      </div>
+
+      <!-- ── Column 4 : Newsletter ────────────────────────────── -->
+      <div class="col-xl-4 col-lg-4 col-md-6">
+        <h5 class="footer-heading">Stay Updated</h5>
+        <p style="font-size:0.86rem;line-height:1.75;margin-bottom:18px;color:#9CA3AF;">
+          Subscribe to get the latest recipes, seasonal picks, cooking tips, and food inspiration delivered fresh to
+          your inbox.
+        </p>
+
+        <div class="footer-newsletter" id="footerNewsletter">
+          <div class="newsletter-inner">
+            <input type="email" id="newsletterEmail" placeholder="Enter your email address"
+              aria-label="Email for newsletter" class="newsletter-input">
+            <button type="button" class="newsletter-btn" onclick="subscribeNewsletter()">
+              <i class="fa-solid fa-paper-plane"></i>
+              <span class="newsletter-btn-text">Subscribe</span>
+            </button>
+          </div>
+          <p class="newsletter-note">
+            <i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i>
+            No spam, ever. Unsubscribe in one click.
+          </p>
+        </div>
+
+        <!-- Contact row -->
+        <div class="footer-contact">
+          <a href="mailto:hello@recipehaven.com" class="footer-contact-item">
+            <div class="footer-contact-icon"><i class="fa-solid fa-envelope"></i></div>
+            <div>
+              <div
+                style="font-size:0.7rem;color:#6B7280;text-transform:uppercase;letter-spacing:.05em;font-weight:600;">
+                Email Us</div>
+              <div style="font-size:0.82rem;color:#FFD4B8;">hello@recipehaven.com</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+  </div><!-- /container -->
+
+  <!-- ── Bottom Bar ────────────────────────────────────────────── -->
+  <div class="footer-bottom">
+    <div class="container">
+      <div class="footer-bottom-inner">
+        <div class="footer-copy">
+          <i class="fa-regular fa-copyright me-1"></i>
+          2026 Recipe Haven. All rights reserved.
+          Made with <i class="fa-solid fa-heart" style="color:var(--red);margin:0 3px;"></i> for food lovers.
+        </div>
+        <div class="footer-bottom-links">
+          <a href="/listings/about">About</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="/listings/about/privacy">Privacy Policy</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="/listings/about">Terms of Use</a>
+          <span class="footer-dot">&middot;</span>
+          <a href="mailto:hello@recipehaven.com">Contact</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</footer><!-- /footer -->
+
+
+<!-- ── Footer Styles ─────────────────────────────────────────── -->
+<style>
+  /* Pre-footer CTA Strip */
+  .footer-cta-strip {
+    background: linear-gradient(135deg, #C43E10 0%, var(--primary-dark) 40%, var(--primary) 100%);
+    padding: 56px 0;
+    margin-top: 80px;
+  }
+
+  .footer-cta-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .footer-cta-inner h3 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: white;
+    margin: 0 0 8px;
+  }
+
+  .footer-cta-inner p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  .footer-cta-btns {
+    display: flex;
+    gap: 12px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+
+  .btn-cta-outline {
+    border: 2px solid rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+    background: transparent !important;
+    font-weight: 600;
+    border-radius: var(--radius-sm) !important;
+    padding: 10px 22px !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .btn-cta-outline:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: white !important;
+  }
+
+  /* Footer body */
+  .rh-footer {
+    background: #111827;
+    color: #9CA3AF;
+    padding-top: 64px;
+    font-size: 0.88rem;
+  }
+
+  /* Brand */
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    margin-bottom: 18px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: white;
+  }
+
+  .footer-logo em {
+    font-style: normal;
+    color: var(--primary);
+  }
+
+  .footer-logo:hover {
+    color: white;
+    text-decoration: none;
+  }
+
+  .footer-brand-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .footer-tagline {
+    font-size: 0.87rem;
+    line-height: 1.8;
+    color: #9CA3AF;
+    max-width: 310px;
+    margin-bottom: 22px;
+  }
+
+  /* Social icons */
+  .footer-social {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  .footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    color: #9CA3AF;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.22s;
+  }
+
+  .footer-social a:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  /* Stats chips */
+  .footer-stats {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .footer-stat-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 0.74rem;
+    color: #FFD4B8;
+    font-weight: 500;
+  }
+
+  .footer-stat-chip i {
+    color: var(--primary);
+    font-size: 0.68rem;
+  }
+
+  /* Heading */
+  .footer-heading {
+    color: white;
+    font-size: 0.86rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 18px;
+    position: relative;
+    padding-bottom: 12px;
+  }
+
+  .footer-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 28px;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 999px;
+  }
+
+  /* Links */
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .footer-links li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9CA3AF;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 6px 0;
+    transition: color 0.18s, padding-left 0.18s;
+  }
+
+  .footer-links li a i {
+    width: 14px;
+    font-size: 0.73rem;
+    color: #4B5563;
+    transition: color 0.18s;
+    flex-shrink: 0;
+  }
+
+  .footer-links li a:hover {
+    color: var(--primary);
+    padding-left: 4px;
+  }
+
+  .footer-links li a:hover i {
+    color: var(--primary);
+  }
+
+  /* Newsletter */
+  .footer-newsletter {
+    margin-bottom: 20px;
+  }
+
+  .newsletter-inner {
+    display: flex;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .newsletter-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 12px 14px;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.83rem;
+    min-width: 0;
+  }
+
+  .newsletter-input::placeholder {
+    color: #6B7280;
+  }
+
+  .newsletter-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 18px;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .newsletter-btn:hover {
+    background: var(--primary-dark);
+  }
+
+  .newsletter-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.73rem;
+    color: #6B7280;
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+
+  /* Contact */
+  .footer-contact {
+    margin-top: 16px;
+  }
+
+  .footer-contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.2s;
+  }
+
+  .footer-contact-item:hover {
+    background: rgba(255, 107, 53, 0.1);
+    border-color: rgba(255, 107, 53, 0.3);
+    text-decoration: none;
+  }
+
+  .footer-contact-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 9px;
+    background: rgba(255, 107, 53, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  /* Bottom bar */
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 20px 0;
+    margin-top: 8px;
+  }
+
+  .footer-bottom-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-copy {
+    font-size: 0.8rem;
+    color: #6B7280;
+  }
+
+  .footer-bottom-links {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .footer-bottom-links a {
+    color: #6B7280;
+    text-decoration: none;
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+
+  .footer-bottom-links a:hover {
+    color: var(--primary);
+  }
+
+  .footer-dot {
+    color: #374151;
+    font-size: 0.75rem;
+  }
+
+  /* Responsive */
+  @media (max-width: 767px) {
+    .footer-cta-strip {
+      padding: 40px 0;
+    }
+
+    .footer-cta-inner {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-cta-btns {
+      justify-content: center;
+    }
+
+    .footer-cta-inner h3 {
+      font-size: 1.3rem;
+    }
+
+    .rh-footer {
+      padding-top: 44px;
+    }
+
+    .footer-tagline {
+      max-width: 100%;
+    }
+
+    .footer-bottom-inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .newsletter-btn-text {
+      display: none;
+    }
+
+    .newsletter-btn {
+      padding: 12px 14px;
+    }
+  }
+</style>
+
+<!-- ── Newsletter subscribe script ───────────────────────────── -->
+<script>
+  async function subscribeNewsletter() {
+    const input = document.getElementById('newsletterEmail');
+    const btn   = document.querySelector('.newsletter-btn');
+    const email = input ? input.value.trim() : '';
+    const re    = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!email || !re.test(email)) {
+      if (input) {
+        input.style.outline = '2px solid var(--red)';
+        const prev = input.placeholder;
+        input.placeholder = 'Please enter a valid email';
+        setTimeout(() => { input.style.outline = ''; input.placeholder = prev; }, 2500);
+      }
+      return;
+    }
+
+    // Loading state
+    if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>'; }
+
+    try {
+      const res  = await fetch('/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email }),
+      });
+      const data = await res.json();
+
+      const wrap = document.getElementById('footerNewsletter');
+      if (wrap) {
+        if (data.success) {
+          wrap.innerHTML = `
+            <div style="display:flex;align-items:center;gap:14px;background:rgba(255,107,53,0.12);
+              border:1px solid rgba(255,107,53,0.35);border-radius:12px;padding:16px 18px;">
+              <i class="fa-solid fa-circle-check fa-lg" style="color:var(--primary);flex-shrink:0;"></i>
+              <div>
+                <div style="color:white;font-weight:700;font-size:0.9rem;">You're subscribed!</div>
+                <div style="color:#9CA3AF;font-size:0.78rem;margin-top:2px;">
+                  ${data.message} (<strong style="color:#FFD4B8;">${email}</strong>)
+                </div>
+              </div>
+            </div>`;
+        } else {
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span class="newsletter-btn-text"> Subscribe</span>'; }
+          input.style.outline = '2px solid var(--red)';
+          input.placeholder = data.message || 'Something went wrong';
+          setTimeout(() => { input.style.outline = ''; input.placeholder = 'Enter your email address'; }, 3000);
+        }
+      }
+    } catch (e) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i><span class="newsletter-btn-text"> Subscribe</span>'; }
+      console.error('Subscribe error:', e);
+    }
+  }
+</script>

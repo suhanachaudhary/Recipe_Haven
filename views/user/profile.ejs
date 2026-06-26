@@ -1,0 +1,285 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="container mt-4 mb-5">
+
+  <!-- Cover + Avatar -->
+  <div class="profile-cover">
+    <div class="profile-avatar-wrapper">
+      <div class="profile-avatar-xl">
+        <%= profileUser.username.charAt(0).toUpperCase() %>
+      </div>
+    </div>
+    <!-- Decorative circles -->
+    <div style="position:absolute;top:-40px;right:-40px;width:200px;height:200px;background:rgba(255,255,255,0.07);border-radius:50%;"></div>
+    <div style="position:absolute;bottom:-60px;right:80px;width:140px;height:140px;background:rgba(255,255,255,0.05);border-radius:50%;"></div>
+  </div>
+
+  <!-- Profile Info Row -->
+  <div class="profile-info-row">
+    <div>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <div class="profile-name">@<%= profileUser.username %></div>
+        <% if (profileUser.role === 'admin') { %>
+          <span class="badge" style="background:var(--red);color:white;">
+            <i class="fa-solid fa-shield-halved"></i> Admin
+          </span>
+        <% } %>
+      </div>
+      <div class="profile-email"><%= profileUser.email %></div>
+      <div class="profile-followers mt-2">
+        <span><strong><%= profileUser.followers.length %></strong> Followers</span>
+        <span><strong><%= profileUser.following.length %></strong> Following</span>
+        <span><strong><%= userRecipes.length %></strong> Recipes</span>
+      </div>
+    </div>
+
+    <% if (currUser && !currUser._id.equals(profileUser._id)) { %>
+      <div class="d-flex gap-2 align-items-start mt-2">
+        <button id="followBtn" onclick="toggleFollow('<%= profileUser._id %>')"
+          class="btn <%= isFollowing ? 'btn-secondary' : 'btn-primary' %>">
+          <i class="fa-solid fa-<%= isFollowing ? 'user-minus' : 'user-plus' %>"></i>
+          <%= isFollowing ? 'Unfollow' : 'Follow' %>
+        </button>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-card-sm">
+        <div class="stat-num" style="color:var(--primary);"><%= userRecipes.length %></div>
+        <div class="stat-lbl"><i class="fa-solid fa-utensils me-1"></i> Recipes</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card-sm">
+        <div class="stat-num" style="color:#3B82F6;"><%= totalLikes %></div>
+        <div class="stat-lbl"><i class="fa-solid fa-thumbs-up me-1"></i> Likes</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card-sm">
+        <div class="stat-num" style="color:var(--orange);"><%= totalViews %></div>
+        <div class="stat-lbl"><i class="fa-solid fa-eye me-1"></i> Views</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-card-sm">
+        <div class="stat-num" style="color:#8B5CF6;"><%= profileUser.savedRecipes.length %></div>
+        <div class="stat-lbl"><i class="fa-solid fa-bookmark me-1"></i> Saved</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="profile-tabs">
+    <button class="profile-tab active" onclick="showTab('recent', this)">
+      <i class="fa-solid fa-clock-rotate-left"></i> Recent Recipes
+    </button>
+    <% if (currUser && currUser._id.equals(profileUser._id)) { %>
+      <button class="profile-tab" onclick="showTab('saved', this)">
+        <i class="fa-solid fa-bookmark"></i> Saved Recipes
+      </button>
+    <% } %>
+    <button class="profile-tab" onclick="showTab('all', this)">
+      <i class="fa-solid fa-grid-2"></i> All Recipes
+    </button>
+  </div>
+
+  <!-- Tab: Recent Recipes -->
+  <div id="tab-recent">
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="info-card">
+          <div class="card-header-rh">
+            <i class="fa-solid fa-clock-rotate-left" style="color:var(--primary);"></i>
+            Recent Recipes by @<%= profileUser.username %>
+          </div>
+          <div class="card-body-rh" style="padding:0;">
+            <% if (recentRecipes.length === 0) { %>
+              <div style="padding:24px;text-align:center;color:var(--grey);font-size:0.88rem;">
+                <i class="fa-solid fa-utensils d-block mb-2" style="font-size:1.8rem;color:var(--border);"></i>
+                No recipes yet.
+              </div>
+            <% } %>
+            <% for (let recipe of recentRecipes) { %>
+              <a href="/listings/<%= recipe._id %>"
+                style="display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--bg);text-decoration:none;transition:background 0.2s;"
+                onmouseover="this.style.background='var(--bg)'" onmouseout="this.style.background='transparent'">
+                <img src="<%= recipe.image.url %>" alt="<%= recipe.title %>"
+                  style="width:52px;height:52px;object-fit:cover;border-radius:10px;flex-shrink:0;">
+                <div class="flex-fill">
+                  <div style="font-weight:700;font-size:0.88rem;color:var(--dark);"><%= recipe.title %></div>
+                  <div style="font-size:0.75rem;color:var(--grey);margin-top:2px;">
+                    <i class="fa-solid fa-thumbs-up" style="color:var(--primary);"></i> <%= recipe.likes.length %>
+                    &nbsp;·&nbsp;
+                    <i class="fa-solid fa-eye" style="color:var(--grey);"></i> <%= recipe.views %>
+                  </div>
+                </div>
+                <i class="fa-solid fa-chevron-right" style="color:var(--border);font-size:0.8rem;"></i>
+              </a>
+            <% } %>
+          </div>
+          <% if (userRecipes.length > 5) { %>
+            <div style="padding:12px 20px;text-align:center;border-top:1px solid var(--border);">
+              <button class="profile-tab" onclick="showTab('all', document.querySelectorAll('.profile-tab')[2] || document.querySelectorAll('.profile-tab')[1])"
+                style="font-size:0.82rem;color:var(--primary);">
+                View all <%= userRecipes.length %> recipes →
+              </button>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Following / Followers summary -->
+      <div class="col-md-6">
+        <div class="info-card h-100">
+          <div class="card-header-rh">
+            <i class="fa-solid fa-chart-bar" style="color:var(--primary);"></i> Stats Overview
+          </div>
+          <div class="card-body-rh">
+            <div class="show-stat" style="padding:14px 0;">
+              <i class="fa-solid fa-utensils" style="color:var(--primary);"></i>
+              <span style="font-size:0.85rem;">Total Recipes</span>
+              <strong class="ms-auto"><%= userRecipes.length %></strong>
+            </div>
+            <div class="show-stat" style="padding:14px 0;">
+              <i class="fa-solid fa-thumbs-up" style="color:#3B82F6;"></i>
+              <span style="font-size:0.85rem;">Total Likes Received</span>
+              <strong class="ms-auto"><%= totalLikes %></strong>
+            </div>
+            <div class="show-stat" style="padding:14px 0;">
+              <i class="fa-solid fa-eye" style="color:var(--orange);"></i>
+              <span style="font-size:0.85rem;">Total Recipe Views</span>
+              <strong class="ms-auto"><%= totalViews %></strong>
+            </div>
+            <div class="show-stat" style="padding:14px 0;">
+              <i class="fa-solid fa-users" style="color:var(--primary);"></i>
+              <span style="font-size:0.85rem;">Followers</span>
+              <strong class="ms-auto"><%= profileUser.followers.length %></strong>
+            </div>
+            <div class="show-stat" style="padding:14px 0;">
+              <i class="fa-solid fa-user-group" style="color:#8B5CF6;"></i>
+              <span style="font-size:0.85rem;">Following</span>
+              <strong class="ms-auto"><%= profileUser.following.length %></strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Saved Recipes -->
+  <% if (currUser && currUser._id.equals(profileUser._id)) { %>
+    <div id="tab-saved" style="display:none;">
+      <% if (profileUser.savedRecipes.length === 0) { %>
+        <div class="empty-state">
+          <i class="fa-regular fa-bookmark"></i>
+          <h4>No saved recipes yet</h4>
+          <p>Start saving recipes you love by clicking the bookmark icon.</p>
+          <a href="/listings" class="btn btn-primary">Explore Recipes</a>
+        </div>
+      <% } else { %>
+        <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3">
+          <% for (let recipe of profileUser.savedRecipes) { %>
+            <div class="col">
+              <div class="recipe-card">
+                <div class="recipe-card-img">
+                  <a href="/listings/<%= recipe._id %>">
+                    <img src="<%= recipe.image.url %>" alt="<%= recipe.title %>" loading="lazy">
+                  </a>
+                  <div class="recipe-card-overlay"></div>
+                </div>
+                <div class="recipe-card-body">
+                  <a href="/listings/<%= recipe._id %>" style="text-decoration:none;">
+                    <div class="recipe-card-title"><%= recipe.title %></div>
+                  </a>
+                  <div class="mt-2">
+                    <a href="/listings/<%= recipe._id %>" class="btn btn-primary btn-sm w-100" style="justify-content:center;">
+                      View Recipe
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <!-- Tab: All Recipes -->
+  <div id="tab-all" style="display:none;">
+    <% if (userRecipes.length === 0) { %>
+      <div class="empty-state">
+        <i class="fa-solid fa-utensils"></i>
+        <h4>No recipes yet</h4>
+        <p>@<%= profileUser.username %> hasn't published any recipes.</p>
+        <% if (currUser && currUser._id.equals(profileUser._id)) { %>
+          <a href="/listings/new" class="btn btn-primary">Add Your First Recipe</a>
+        <% } %>
+      </div>
+    <% } else { %>
+      <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3">
+        <% for (let recipe of userRecipes) { %>
+          <div class="col">
+            <div class="recipe-card">
+              <div class="recipe-card-img">
+                <a href="/listings/<%= recipe._id %>">
+                  <img src="<%= recipe.image.url %>" alt="<%= recipe.title %>" loading="lazy">
+                </a>
+                <div class="recipe-card-overlay"></div>
+              </div>
+              <div class="recipe-card-body">
+                <a href="/listings/<%= recipe._id %>" style="text-decoration:none;">
+                  <div class="recipe-card-title"><%= recipe.title %></div>
+                </a>
+                <div class="recipe-card-meta mt-2">
+                  <span><i class="fa-solid fa-thumbs-up"></i> <%= recipe.likes.length %></span>
+                  <span><i class="fa-solid fa-eye"></i> <%= recipe.views %></span>
+                  <span><i class="fa-solid fa-clock"></i> <%= recipe.cooking_time %></span>
+                </div>
+                <a href="/listings/<%= recipe._id %>" class="btn btn-primary btn-sm w-100 mt-2" style="justify-content:center;">
+                  View Recipe
+                </a>
+              </div>
+            </div>
+          </div>
+        <% } %>
+      </div>
+    <% } %>
+  </div>
+
+</div>
+
+<script>
+function showTab(tabId, btn) {
+  ['recent', 'saved', 'all'].forEach(id => {
+    const el = document.getElementById('tab-' + id);
+    if (el) el.style.display = 'none';
+  });
+  document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+  const target = document.getElementById('tab-' + tabId);
+  if (target) target.style.display = 'block';
+  if (btn) btn.classList.add('active');
+}
+
+async function toggleFollow(userId) {
+  try {
+    const res  = await fetch(`/user/${userId}/follow`, { method: 'POST' });
+    const data = await res.json();
+    if (res.status === 401) { rhToast(data.message || 'Please log in to follow users.', 'warning'); return; }
+    const btn = document.getElementById('followBtn');
+    if (data.following) {
+      btn.innerHTML = '<i class="fa-solid fa-user-minus"></i> Unfollow';
+      btn.className = 'btn btn-secondary';
+      rhToast('Now following this chef! 🎉', 'success', 2500);
+    } else {
+      btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Follow';
+      btn.className = 'btn btn-primary';
+      rhToast('Unfollowed.', 'info', 2500);
+    }
+  } catch(e) { rhToast('Something went wrong.', 'error'); }
+}
+</script>

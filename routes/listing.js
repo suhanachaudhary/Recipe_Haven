@@ -1,93 +1,105 @@
-
-const express=require("express");
-const router=express.Router();
-const { isLoggedIn ,validateListing, isOwner }=require("../middleware.js");
-const wrapAsync=require("../utils/wrapAsync");
+const express = require("express");
+const router = express.Router();
+const { isLoggedIn, validateListing, isOwner } = require("../middleware.js");
+const wrapAsync = require("../utils/wrapAsync");
 const Listing = require("../models/listing");
+const Notification = require("../models/notification");
+const User = require("../models/user");
+const { sendEmail, likeEmailHtml } = require("../utils/mailer");
 
-const multer  = require('multer') //handle the multipart form data only for image
+const multer = require('multer');
+const { storage } = require("../cloudConfig.js");
+const upload = multer({ storage });
 
-const { storage }=require("../cloudConfig.js");
-const upload = multer({ storage }) //store all images in dest:folder
+const listingControllers = require("../controllers/listing.js");
 
-const listingControllers=require("../controllers/listing.js");
-//index route
-router.get("/",wrapAsync(listingControllers.index));
+router.get("/", wrapAsync(listingControllers.index));
 
-router.get("/about",(req,res)=>{
+router.get("/about", (req, res) => {
     res.render("listings/about.ejs");
-})
+});
 
-//privacy
-router.get("/about/privacy",(req,res)=>{
+router.get("/about/privacy", (req, res) => {
     res.render("listings/privacy.ejs");
-})
+});
 
-//new form route
-router.get("/new",isLoggedIn,listingControllers.renderNewForm);
+router.get("/new", isLoggedIn, listingControllers.renderNewForm);
 
-//show route
-router.get("/:id",wrapAsync(listingControllers.showPage));
+router.get("/:id", wrapAsync(listingControllers.showPage));
 
-//post new recipe route
-router.post("/",isLoggedIn, upload.single("listing[image]"),validateListing,wrapAsync(listingControllers.newRecipe));
+router.post("/", isLoggedIn, upload.single("listing[image]"), validateListing, wrapAsync(listingControllers.newRecipe));
 
-//render edit form
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingControllers.renderEdit));
+router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingControllers.renderEdit));
 
-//edit data
-router.put("/:id",isLoggedIn,isOwner, upload.single("listing[image]"),validateListing,wrapAsync(listingControllers.editRecipe));
+router.put("/:id", isLoggedIn, isOwner, upload.single("listing[image]"), validateListing, wrapAsync(listingControllers.editRecipe));
 
-//delete listing
-router.delete("/:id",isLoggedIn,isOwner,wrapAsync(listingControllers.deleteRecipe));
+router.delete("/:id", isLoggedIn, isOwner, wrapAsync(listingControllers.deleteRecipe));
 
+router.post("/:id/like", async (req, res) => {
+    if (!req.user) return res.status(401).json({ message: "Please login to like recipes." });
 
+    try {
+        const listing = await Listing.findById(req.params.id);
+        const userId = req.user._id;
 
-router.post("/:id/like", isLoggedIn, async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    const userId = req.user._id;
-  
-    // Remove from dislikes if present
-    listing.dislikes = listing.dislikes.filter(id => id.toString() !== userId.toString());
-  
-    if (!listing.likes.includes(userId)) {
-      listing.likes.push(userId);
-    } else {
-      // toggle off like
-      listing.likes = listing.likes.filter(id => id.toString() !== userId.toString());
+        listing.dislikes = listing.dislikes.filter(id => !id.equals(userId));
+        const alreadyLiked = listing.likes.some(id => id.equals(userId));
+
+        if (!alreadyLiked) {
+            listing.likes.push(userId);
+            if (!listing.owner.equals(userId)) {
+                await Notification.create({
+                    recipient: listing.owner,
+                    sender:    userId,
+                    type:      'like',
+                    listing:   listing._id,
+                    message:   `${req.user.username} liked your recipe "${listing.title}".`,
+                });
+
+                // Send email to recipe owner
+                const owner = await User.findById(listing.owner).select('email username');
+                if (owner && owner.email) {
+                    sendEmail({
+                        to:      owner.email,
+                        subject: `❤️ ${req.user.username} liked your recipe on Recipe Haven`,
+                        html:    likeEmailHtml(owner.username, req.user.username, listing.title, listing._id),
+                    }).catch(e => console.error('Email error (like):', e.message));
+                }
+            }
+        } else {
+            listing.likes = listing.likes.filter(id => !id.equals(userId));
+        }
+
+        await listing.save();
+        res.json({ likes: listing.likes.length, dislikes: listing.dislikes.length });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error." });
     }
-  
-    await listing.save();
-    res.json({ likes: listing.likes.length, dislikes: listing.dislikes.length });
-  });
-  
-  // Dislike a listing
-  router.post("/:id/dislike", isLoggedIn, async (req, res) => {
-    const listing = await Listing.findById(req.params.id);
-    const userId = req.user._id;
-  
-    // Remove from likes if present
-    listing.likes = listing.likes.filter(id => id.toString() !== userId.toString());
-  
-    if (!listing.dislikes.includes(userId)) {
-      listing.dislikes.push(userId);
-    } else {
-      // toggle off dislike
-      listing.dislikes = listing.dislikes.filter(id => id.toString() !== userId.toString());
+});
+
+router.post("/:id/dislike", async (req, res) => {
+    if (!req.user) return res.status(401).json({ message: "Please login to dislike recipes." });
+
+    try {
+        const listing = await Listing.findById(req.params.id);
+        const userId = req.user._id;
+
+        listing.likes = listing.likes.filter(id => !id.equals(userId));
+        const alreadyDisliked = listing.dislikes.some(id => id.equals(userId));
+
+        if (!alreadyDisliked) {
+            listing.dislikes.push(userId);
+        } else {
+            listing.dislikes = listing.dislikes.filter(id => !id.equals(userId));
+        }
+
+        await listing.save();
+        res.json({ likes: listing.likes.length, dislikes: listing.dislikes.length });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error." });
     }
-  
-    await listing.save();
-    res.json({ likes: listing.likes.length, dislikes: listing.dislikes.length });
-  });
-  
+});
 
-router.get('/search', async (req, res) => {
-    const query = req.query.query;
-    const recipes = await Listing.find({
-      title: { $regex: query, $options: 'i' }
-    });
-    res.render('searchresults', { recipes });
-  });
-  
-
-module.exports=router;
+module.exports = router;

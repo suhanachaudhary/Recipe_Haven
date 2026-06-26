@@ -1,40 +1,668 @@
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/" style="font-family: cursive; color:#7C00FE;font-size: 1.5rem;font-weight: 600;">Recipe Haven</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+<%
+  /* Active link helper — compares request path */
+  const currentPath = locals.currentPath || (typeof req !== 'undefined' ? req.path : '');
+  function isActive(path) {
+    if (path === '/' && currentPath === '/') return true;
+    if (path !== '/' && currentPath.startsWith(path)) return true;
+    return false;
+  }
+%>
+
+<!-- ═══════════════════════════════════════════════════════════
+     RECIPE HAVEN — NAVBAR
+     ═══════════════════════════════════════════════════════════ -->
+<nav class="rh-navbar navbar navbar-expand-lg" id="mainNavbar">
+  <div class="container-fluid px-4">
+
+    <!-- ── Logo ─────────────────────────────────────────────── -->
+    <a class="navbar-brand flex-shrink-0" href="/" aria-label="Recipe Haven home">
+      <div class="brand-icon">
+        <i class="fa-solid fa-utensils"></i>
+      </div>
+      <span class="brand-text">Recipe <span class="brand-accent">Haven</span></span>
+    </a>
+
+    <!-- ── Mobile right-side icons ──────────────────────────── -->
+    <div class="d-flex align-items-center gap-2 d-lg-none ms-auto me-2">
+      <button class="nav-icon-btn" id="mobileSearchToggle" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <% if (currUser) { %>
+        <button class="nav-icon-btn position-relative" onclick="window.location='/notifications'" aria-label="Notifications">
+          <i class="fa-solid fa-bell"></i>
+          <% if (unreadNotificationCount > 0) { %>
+            <span class="rh-notif-badge"><%= unreadNotificationCount <= 9 ? unreadNotificationCount : '9+' %></span>
+          <% } %>
+        </button>
+      <% } %>
+    </div>
+
+    <!-- ── Hamburger ─────────────────────────────────────────── -->
+    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+      data-bs-target="#rhNavbar" aria-controls="rhNavbar"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="toggler-icon"><span></span><span></span><span></span></span>
+    </button>
+
+    <!-- ── Collapsible Area ──────────────────────────────────── -->
+    <div class="collapse navbar-collapse" id="rhNavbar">
+
+      <!-- Search bar -->
+      <div class="nav-search-wrap mx-3">
+        <form action="/listings" method="GET" role="search" class="nav-search-form">
+          <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+          <input type="search" name="q" class="nav-search-input"
+            placeholder="Search recipes…" autocomplete="off" aria-label="Search recipes">
+          <button type="submit" class="nav-search-btn" aria-label="Search">
+            <i class="fa-solid fa-arrow-right"></i>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/listings">Recipe</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/listings/new">Add Recipe</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link active" href="/listings/about">About</a>
-              </li>
+        </form>
+      </div>
 
-              <% if(!currUser){%>
-                <li class="nav-item">
-                  <a class="nav-link active" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link active" href="/signup">SignUp</a>
+      <!-- Nav links -->
+      <ul class="navbar-nav align-items-lg-center me-auto mb-2 mb-lg-0">
+
+        <li class="nav-item">
+          <a class="rh-nav-link <%= isActive('/listings') && !isActive('/listings/new') ? 'active' : '' %>"
+            href="/listings" title="Explore Recipes">
+            <i class="fa-solid fa-compass"></i>
+            <span class="nav-label">Explore</span>
+          </a>
+        </li>
+
+        <!-- Categories dropdown -->
+        <li class="nav-item dropdown">
+          <a class="rh-nav-link dropdown-toggle-custom" href="#" id="catDropdown"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Categories">
+            <i class="fa-solid fa-layer-group"></i>
+            <span class="nav-label">Categories</span>
+            <i class="fa-solid fa-chevron-down nav-chevron"></i>
+          </a>
+          <ul class="dropdown-menu rh-dropdown" aria-labelledby="catDropdown">
+            <li class="rh-dropdown-header">Browse by Category</li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?category=Breakfast"><span class="rh-drop-emoji">🍳</span> Breakfast</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?category=Lunch"><span class="rh-drop-emoji">🥗</span> Lunch</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?category=Dinner"><span class="rh-drop-emoji">🍛</span> Dinner</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?category=Snacks"><span class="rh-drop-emoji">🥨</span> Snacks</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?category=Dessert"><span class="rh-drop-emoji">🍰</span> Desserts</a></li>
+            <li><hr class="dropdown-divider my-1"></li>
+            <li class="rh-dropdown-header">Browse by Diet</li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?diet=vegetarian"><span class="rh-drop-emoji">🥗</span> Vegetarian</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?diet=vegan"><span class="rh-drop-emoji">🌱</span> Vegan</a></li>
+            <li><a class="dropdown-item rh-drop-item" href="/listings?diet=non-vegetarian"><span class="rh-drop-emoji">🍗</span> Non-Veg</a></li>
+          </ul>
+        </li>
+
+        <% if (currUser) { %>
+          <li class="nav-item">
+            <a class="rh-nav-link <%= isActive('/mealplan') ? 'active' : '' %>"
+              href="/mealplan" title="Meal Planner">
+              <i class="fa-solid fa-calendar-week"></i>
+              <span class="nav-label">Planner</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="rh-nav-link <%= isActive('/grocery') ? 'active' : '' %>"
+              href="/grocery" title="Grocery List">
+              <i class="fa-solid fa-basket-shopping"></i>
+              <span class="nav-label">Grocery</span>
+            </a>
+          </li>
+          <% if (currUser.role === 'admin') { %>
+            <li class="nav-item">
+              <a class="rh-nav-link <%= isActive('/admin') ? 'active' : '' %>"
+                href="/admin/dashboard" title="Admin Analytics">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span class="nav-label">Analytics</span>
+              </a>
+            </li>
+          <% } %>
+        <% } %>
+
+      </ul>
+
+      <!-- Right actions -->
+      <ul class="navbar-nav align-items-lg-center gap-lg-2 mt-3 mt-lg-0 mb-2 mb-lg-0 flex-shrink-0">
+
+        <!-- Add Recipe CTA -->
+        <li class="nav-item">
+          <a href="/listings/new" class="nav-add-btn <%= isActive('/listings/new') ? 'active' : '' %>" aria-label="Add new recipe">
+            <i class="fa-solid fa-plus"></i>
+            <span>Add Recipe</span>
+          </a>
+        </li>
+
+        <% if (!currUser) { %>
+          <li class="nav-item">
+            <a href="/login" class="nav-text-btn" aria-label="Log in">Log In</a>
+          </li>
+          <li class="nav-item">
+            <a href="/signup" class="nav-signup-btn" aria-label="Sign up">
+              <i class="fa-solid fa-rocket"></i> Sign Up
+            </a>
+          </li>
+        <% } %>
+
+        <% if (currUser) { %>
+          <!-- Notification Bell -->
+          <li class="nav-item dropdown d-none d-lg-flex">
+            <button class="nav-icon-btn position-relative" id="notifDropdown"
+              data-bs-toggle="dropdown" data-bs-auto-close="outside"
+              aria-expanded="false"
+              onclick="loadNotifications()"
+              aria-label="Notifications">
+              <i class="fa-solid fa-bell"></i>
+              <% if (unreadNotificationCount > 0) { %>
+                <span class="rh-notif-badge"><%= unreadNotificationCount <= 9 ? unreadNotificationCount : '9+' %></span>
+              <% } %>
+            </button>
+
+            <!-- Notification Dropdown -->
+            <div class="dropdown-menu dropdown-menu-end notif-dropdown p-0" aria-labelledby="notifDropdown">
+              <div class="notif-header">
+                <div class="d-flex align-items-center gap-2">
+                  <i class="fa-solid fa-bell" style="color:var(--primary);"></i>
+                  <span>Notifications</span>
+                  <% if (unreadNotificationCount > 0) { %>
+                    <span class="badge" style="background:var(--red);color:white;font-size:0.65rem;"><%= unreadNotificationCount %></span>
+                  <% } %>
+                </div>
+                <button class="notif-mark-all-btn" onclick="markAllRead()" type="button">Mark all read</button>
+              </div>
+              <div id="notifContent" style="max-height:360px;overflow-y:auto;">
+                <div class="notif-loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>
+              </div>
+              <div class="notif-footer">
+                <a href="/notifications" style="font-size:0.8rem;color:var(--primary);font-weight:600;text-decoration:none;">
+                  View all <i class="fa-solid fa-arrow-right ms-1"></i>
+                </a>
+              </div>
+            </div>
+          </li>
+
+          <!-- User Avatar Dropdown -->
+          <li class="nav-item dropdown">
+            <a href="#" class="nav-user-trigger" id="userDropdown"
+              data-bs-toggle="dropdown" aria-expanded="false" aria-label="User menu">
+              <div class="user-avatar" title="<%= currUser.username %>">
+                <%= currUser.username.charAt(0).toUpperCase() %>
+              </div>
+              <i class="fa-solid fa-chevron-down d-none d-lg-inline" style="font-size:0.55rem;color:var(--grey);margin-left:2px;"></i>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end rh-user-dropdown" aria-labelledby="userDropdown">
+              <li class="rh-user-header">
+                <div class="rh-user-avatar-lg"><%= currUser.username.charAt(0).toUpperCase() %></div>
+                <div>
+                  <div class="rh-user-name">@<%= currUser.username %></div>
+                  <div class="rh-user-email"><%= currUser.email %></div>
+                  <% if (currUser.role === 'admin') { %>
+                    <span class="badge mt-1" style="background:var(--red);color:white;font-size:0.6rem;">
+                      <i class="fa-solid fa-shield-halved"></i> Admin
+                    </span>
+                  <% } %>
+                </div>
+              </li>
+              <li><hr class="dropdown-divider my-1"></li>
+              <li>
+                <a class="dropdown-item rh-drop-item" href="/profile/<%= currUser.username %>">
+                  <span class="rh-drop-icon" style="background:#FFF0EA;color:var(--primary);"><i class="fa-solid fa-user"></i></span>
+                  My Profile
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item rh-drop-item" href="/listings/new">
+                  <span class="rh-drop-icon" style="background:#FEF3C7;color:var(--orange);"><i class="fa-solid fa-plus"></i></span>
+                  Add Recipe
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item rh-drop-item" href="/mealplan">
+                  <span class="rh-drop-icon" style="background:#EFF6FF;color:#3B82F6;"><i class="fa-solid fa-calendar-week"></i></span>
+                  Meal Planner
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item rh-drop-item" href="/grocery">
+                  <span class="rh-drop-icon" style="background:#FFF0EA;color:var(--primary);"><i class="fa-solid fa-basket-shopping"></i></span>
+                  Grocery List
+                </a>
+              </li>
+              <% if (currUser.role === 'admin') { %>
+                <li><hr class="dropdown-divider my-1"></li>
+                <li>
+                  <a class="dropdown-item rh-drop-item" href="/admin/dashboard">
+                    <span class="rh-drop-icon" style="background:#FFF7ED;color:var(--orange);"><i class="fa-solid fa-chart-pie"></i></span>
+                    Admin Dashboard
+                  </a>
                 </li>
               <% } %>
-
-              <% if(currUser){ %>
-                <li class="nav-item">
-                  <a class="nav-link active" href="/logout">Logout</a>
-                </li>
-              <% } %>
-
-              
+              <li><hr class="dropdown-divider my-1"></li>
+              <li>
+                <a class="dropdown-item rh-drop-item" href="/logout" style="color:var(--red)!important;">
+                  <span class="rh-drop-icon" style="background:#FEE2E2;color:var(--red);"><i class="fa-solid fa-right-from-bracket"></i></span>
+                  Logout
+                </a>
+              </li>
             </ul>
+          </li>
+        <% } %>
+
+      </ul>
+    </div><!-- /collapse -->
+  </div><!-- /container -->
+
+  <!-- Mobile Search Bar -->
+  <div class="mobile-search-bar" id="mobileSearchBar">
+    <div class="px-4 py-2">
+      <form action="/listings" method="GET" role="search" class="nav-search-form">
+        <i class="fa-solid fa-magnifying-glass nav-search-icon"></i>
+        <input type="search" name="q" class="nav-search-input"
+          placeholder="Search recipes, ingredients…" autocomplete="off">
+        <button type="submit" class="nav-search-btn"><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+    </div>
+  </div>
+
+</nav><!-- /nav -->
+
+
+<!-- ── Navbar Styles ─────────────────────────────────────────── -->
+<style>
+/* ── Core navbar ── */
+.rh-navbar {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(255,248,240,0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(229,231,235,0.8);
+  padding: 0 !important;
+  transition: box-shadow 0.25s;
+  min-height: 60px;
+}
+.rh-navbar.scrolled { box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+
+/* ── Logo ── */
+.navbar-brand {
+  display: flex; align-items: center; gap: 9px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem; font-weight: 800;
+  color: var(--dark) !important;
+  text-decoration: none;
+  padding: 12px 0;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.brand-icon {
+  width: 34px; height: 34px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 0.9rem; flex-shrink: 0;
+}
+.brand-text { font-weight: 800; }
+.brand-accent { color: var(--primary); }
+
+/* ── Search ── */
+.nav-search-wrap {
+  flex: 0 0 auto;
+  width: 220px;
+}
+@media (max-width: 1199px) { .nav-search-wrap { width: 180px; } }
+.nav-search-form {
+  display: flex; align-items: center;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 4px 4px 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+.nav-search-form:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(255,107,53,.12);
+  background: var(--white);
+}
+.nav-search-icon { color: var(--grey); font-size: 0.8rem; flex-shrink: 0; }
+.nav-search-input {
+  border: none; outline: none; background: transparent;
+  font-family: 'Poppins', sans-serif; font-size: 0.8rem;
+  color: var(--dark); flex: 1; min-width: 0; margin: 0 6px;
+}
+.nav-search-input::placeholder { color: #9CA3AF; }
+.nav-search-btn {
+  background: var(--primary); border: none; border-radius: 999px;
+  width: 26px; height: 26px; display: flex; align-items: center;
+  justify-content: center; color: white; font-size: 0.68rem;
+  cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+}
+.nav-search-btn:hover { background: var(--primary-dark); }
+
+/* ── Nav links ── */
+.rh-nav-link {
+  display: flex; align-items: center; gap: 5px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--dark) !important;
+  padding: 5px 10px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.rh-nav-link:hover { color: var(--primary) !important; background: var(--primary-light); }
+.rh-nav-link.active { color: var(--primary) !important; background: var(--primary-light); }
+.rh-nav-link i:first-child { font-size: 0.78rem; }
+.nav-chevron { font-size: 0.6rem !important; opacity: 0.6; }
+
+/* Hide text labels on medium desktops, show on large */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .nav-label { display: none; }
+  .rh-nav-link { padding: 6px 9px; }
+  .rh-nav-link i:first-child { font-size: 0.95rem; }
+  .nav-chevron { display: none !important; }
+}
+
+/* ── Add Recipe CTA button ── */
+.nav-add-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--primary);
+  color: white !important;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+  border: 2px solid var(--primary);
+  box-shadow: 0 2px 8px rgba(255,107,53,.25);
+}
+.nav-add-btn:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(255,107,53,.35);
+}
+.nav-add-btn.active { background: var(--primary-dark); border-color: var(--primary-dark); }
+.nav-add-btn i { font-size: 0.75rem; }
+
+/* ── Login / Signup buttons ── */
+.nav-text-btn {
+  display: inline-flex; align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--dark) !important;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-text-btn:hover { border-color: var(--primary); color: var(--primary) !important; background: var(--primary-light); }
+
+.nav-signup-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--dark);
+  color: white !important;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 7px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.nav-signup-btn:hover { background: var(--primary); color: white !important; transform: translateY(-1px); }
+
+/* ── Icon buttons (bell, search toggle) ── */
+.nav-icon-btn {
+  background: none; border: none;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--dark); font-size: 0.95rem;
+  cursor: pointer; transition: all 0.2s;
+  padding: 0;
+}
+.nav-icon-btn:hover { background: var(--primary-light); color: var(--primary); }
+
+/* ── Hamburger custom ── */
+.navbar-toggler { padding: 6px; border: none !important; outline: none !important; box-shadow: none !important; }
+.navbar-toggler:focus { box-shadow: none !important; }
+.toggler-icon { display: flex; flex-direction: column; gap: 4px; width: 22px; }
+.toggler-icon span {
+  display: block; height: 2px; width: 100%;
+  background: var(--dark); border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* ── Notification badge ── */
+.rh-notif-badge {
+  position: absolute; top: 2px; right: 2px;
+  background: var(--red); color: white;
+  font-size: 0.55rem; font-weight: 700;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1.5px solid var(--bg);
+}
+
+/* ── User avatar ── */
+.user-avatar {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 700; font-size: 0.82rem;
+  cursor: pointer; transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.user-avatar:hover { transform: scale(1.06); }
+.nav-user-trigger {
+  display: flex; align-items: center; gap: 5px;
+  text-decoration: none; padding: 3px 5px;
+  border-radius: 8px; transition: background 0.2s;
+}
+.nav-user-trigger:hover { background: var(--bg); }
+
+/* ── Mobile search bar ── */
+.mobile-search-bar {
+  display: none;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+.mobile-search-bar.open { display: block; }
+
+/* ── Categories dropdown ── */
+.dropdown-toggle-custom::after { display: none; }
+.rh-dropdown {
+  border-radius: 16px !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,.12) !important;
+  padding: 8px !important;
+  min-width: 210px;
+  margin-top: 8px !important;
+}
+.rh-dropdown-header {
+  font-size: 0.67rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--grey); padding: 6px 10px 4px;
+}
+.rh-drop-item {
+  display: flex !important; align-items: center !important; gap: 10px !important;
+  border-radius: 8px !important; padding: 8px 10px !important;
+  font-size: 0.83rem !important; font-weight: 500 !important;
+  color: var(--dark) !important; transition: all 0.15s !important;
+}
+.rh-drop-item:hover { background: var(--bg) !important; color: var(--primary) !important; }
+.rh-drop-emoji { font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }
+
+/* ── Notification dropdown ── */
+.notif-dropdown {
+  width: 330px; border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: 0 16px 48px rgba(0,0,0,.12);
+  overflow: hidden;
+}
+.notif-header {
+  padding: 14px 18px;
+  font-weight: 700; font-size: 0.92rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.notif-item {
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--bg);
+  cursor: pointer; transition: background 0.15s; font-size: 0.83rem;
+}
+.notif-item:hover { background: var(--bg); }
+.notif-item.unread { background: #FFF8F0; font-weight: 600; }
+.notif-type-chip {
+  font-size: 0.63rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.05em; color: var(--primary); background: var(--primary-light);
+  padding: 2px 6px; border-radius: 4px; margin-bottom: 3px; display: inline-block;
+}
+.notif-loading-state {
+  padding: 28px 20px; text-align: center;
+  color: var(--grey); font-size: 0.83rem;
+}
+.notif-mark-all-btn {
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 3px 9px; font-size: 0.7rem; font-weight: 600; color: var(--grey);
+  cursor: pointer; font-family: 'Poppins', sans-serif; transition: all 0.2s;
+}
+.notif-mark-all-btn:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary-dark); }
+.notif-footer {
+  padding: 9px 16px; border-top: 1px solid var(--border);
+  text-align: center; background: var(--bg);
+}
+
+/* ── User dropdown ── */
+.rh-user-dropdown {
+  border-radius: 16px !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,.12) !important;
+  padding: 8px !important;
+  min-width: 225px;
+  margin-top: 8px !important;
+}
+.rh-user-header {
+  display: flex; align-items: center; gap: 11px; padding: 10px 11px 14px;
+}
+.rh-user-avatar-lg {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-weight: 800; font-size: 1rem; flex-shrink: 0;
+}
+.rh-user-name  { font-weight: 700; font-size: 0.86rem; color: var(--dark); }
+.rh-user-email { font-size: 0.7rem; color: var(--grey); margin-top: 1px; word-break: break-all; }
+.rh-drop-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; flex-shrink: 0;
+}
+
+/* ── Mobile collapsed menu ── */
+@media (max-width: 991px) {
+  .container-fluid { padding-left: 1rem !important; padding-right: 1rem !important; }
+  #rhNavbar {
+    padding: 12px 0 14px;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+  }
+  .nav-search-wrap { width: 100%; margin: 0 0 8px !important; }
+  .navbar-nav { gap: 2px; }
+  .rh-nav-link {
+    padding: 9px 12px !important;
+    border-radius: 10px;
+    font-size: 0.88rem !important;
+  }
+  .rh-nav-link .nav-label { display: inline !important; }
+  .nav-add-btn, .nav-text-btn, .nav-signup-btn {
+    width: 100%; justify-content: center;
+    border-radius: 12px !important;
+    padding: 9px 16px !important;
+    font-size: 0.88rem !important;
+  }
+  .nav-chevron { display: inline !important; }
+}
+</style>
+
+
+<!-- ── Notification & Search JS ──────────────────────────────── -->
+<script>
+/* ---------- Notification loading ---------- */
+async function loadNotifications() {
+  const content = document.getElementById('notifContent');
+  if (!content) return;
+  content.innerHTML = '<div class="notif-loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Loading…</div>';
+  try {
+    const res  = await fetch('/notifications', { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    content.innerHTML = '';
+    if (!data.notifications || data.notifications.length === 0) {
+      content.innerHTML = `
+        <div style="text-align:center;padding:32px 20px;color:var(--grey);">
+          <i class="fa-regular fa-bell-slash fa-2x d-block mb-3" style="color:var(--border);"></i>
+          <strong style="font-size:0.86rem;">All caught up!</strong>
+          <div style="font-size:0.76rem;margin-top:4px;">No notifications yet.</div>
+        </div>`;
+      return;
+    }
+    const faIcons = { like: 'fa-thumbs-up', comment: 'fa-comment', follow: 'fa-user-plus' };
+    data.notifications.forEach(n => {
+      const div = document.createElement('div');
+      div.className = `notif-item ${n.read ? '' : 'unread'}`;
+      div.onclick = () => markRead(n._id, div);
+      div.innerHTML = `
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:9px;background:var(--primary-light);color:var(--primary);display:flex;align-items:center;justify-content:center;font-size:0.82rem;flex-shrink:0;">
+            <i class="fa-solid ${faIcons[n.type] || 'fa-bell'}"></i>
           </div>
-        </div>
-      </nav>
-</body>
+          <div style="flex:1;min-width:0;">
+            <div class="notif-type-chip">${n.type}</div>
+            <div style="font-size:0.81rem;color:var(--dark);margin-top:3px;line-height:1.4;">${n.message}</div>
+          </div>
+          ${n.read ? '' : '<div style="width:7px;height:7px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:4px;"></div>'}
+        </div>`;
+      content.appendChild(div);
+    });
+  } catch(e) {
+    content.innerHTML = '<div class="notif-loading-state" style="color:var(--red);"><i class="fa-solid fa-triangle-exclamation me-2"></i>Failed to load</div>';
+  }
+}
+
+async function markRead(id, el) {
+  await fetch(`/notifications/${id}/read`, { method: 'POST' });
+  el.classList.remove('unread');
+  el.querySelector('div[style*="background:var(--primary);border-radius:50%"]')?.remove();
+}
+
+async function markAllRead() {
+  await fetch('/notifications/read-all', { method: 'POST' });
+  document.querySelectorAll('.notif-item.unread').forEach(el => {
+    el.classList.remove('unread');
+    el.querySelector('div[style*="background:var(--primary);border-radius:50%"]')?.remove();
+  });
+  document.querySelectorAll('.rh-notif-badge').forEach(b => b.remove());
+}
+
+/* ---------- Mobile search toggle ---------- */
+document.getElementById('mobileSearchToggle')?.addEventListener('click', function () {
+  const bar = document.getElementById('mobileSearchBar');
+  bar.classList.toggle('open');
+  if (bar.classList.contains('open')) bar.querySelector('input')?.focus();
+});
+
+/* ---------- Navbar scroll shadow ---------- */
+window.addEventListener('scroll', function () {
+  document.getElementById('mainNavbar')?.classList.toggle('scrolled', window.scrollY > 20);
+}, { passive: true });
+</script>

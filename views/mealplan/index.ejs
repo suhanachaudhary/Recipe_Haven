@@ -1,0 +1,128 @@
+<% layout("/layouts/boilerplate") %>
+
+<!-- Page Header -->
+<div class="planner-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-calendar-week me-2"></i>Weekly Meal Planner</h1>
+    <p>Plan your meals for the entire week and auto-generate your grocery list</p>
+  </div>
+</div>
+
+<div class="container mb-5">
+
+  <!-- Action Bar -->
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div style="font-size:0.9rem;color:var(--grey);">
+      <i class="fa-solid fa-circle-info me-1" style="color:var(--primary);"></i>
+      Plan your meals then <a href="/grocery" style="font-weight:600;">generate a grocery list</a>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="/grocery" class="btn btn-outline-primary btn-sm">
+        <i class="fa-solid fa-basket-shopping"></i> Grocery List
+      </a>
+      <form id="clearPlannerForm" action="/mealplan/clear" method="POST">
+        <button type="button" class="btn btn-outline-danger btn-sm" onclick="confirmClearPlanner()">
+          <i class="fa-solid fa-trash"></i> Clear All
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Recipe Form -->
+  <div class="info-card mb-4">
+    <div class="card-header-rh">
+      <i class="fa-solid fa-plus" style="color:var(--primary);"></i> Add Recipe to a Day
+    </div>
+    <div class="card-body-rh">
+      <form action="/mealplan/add" method="POST">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-5">
+            <label class="form-label">Select Recipe</label>
+            <select name="recipeId" class="form-select" required>
+              <option value="">Choose a recipe…</option>
+              <% for (let r of allRecipes) { %>
+                <option value="<%= r._id %>"><%= r.title %></option>
+              <% } %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Select Day</label>
+            <select name="day" class="form-select" required>
+              <option value="">Choose a day…</option>
+              <% for (let day of DAYS) { %>
+                <option value="<%= day %>"><%= day.charAt(0).toUpperCase() + day.slice(1) %></option>
+              <% } %>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button type="submit" class="btn btn-primary w-100">
+              <i class="fa-solid fa-plus"></i> Add to Planner
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Weekly Grid -->
+  <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+    <% for (let day of DAYS) { %>
+      <div class="col">
+        <div class="day-column h-100">
+          <div class="day-column-header">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fa-solid fa-calendar-day"></i>
+              <%= day.charAt(0).toUpperCase() + day.slice(1) %>
+            </div>
+            <span class="day-count-badge"><%= plan[day].length %></span>
+          </div>
+          <div class="day-column-body">
+            <% if (plan[day].length === 0) { %>
+              <div class="day-empty">
+                <i class="fa-regular fa-calendar-plus"></i>
+                No meals yet
+              </div>
+            <% } %>
+            <% for (let recipe of plan[day]) { %>
+              <div class="meal-pill">
+                <img class="meal-pill-img"
+                  src="<%= recipe.image ? recipe.image.url : '/images/samosa.png' %>"
+                  alt="<%= recipe.title %>">
+                <span class="meal-pill-name" title="<%= recipe.title %>"><%= recipe.title %></span>
+                <form action="/mealplan/remove/<%= day %>/<%= recipe._id %>" method="POST" class="d-inline">
+                  <button type="submit" class="meal-remove-btn" title="Remove">
+                    <i class="fa-solid fa-xmark"></i>
+                  </button>
+                </form>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Tip Card -->
+  <div class="planner-tip">
+    <i class="fa-solid fa-lightbulb"></i>
+    <span>
+      After planning your week, head to the
+      <a href="/grocery" style="font-weight:700;color:var(--primary-dark);">Grocery List</a>
+      page to auto-generate a shopping list from your entire meal plan!
+    </span>
+  </div>
+
+</div>
+
+<script>
+async function confirmClearPlanner() {
+  const ok = await rhConfirm({
+    icon:        '🗓️',
+    title:       'Clear entire week?',
+    message:     'This will remove all recipes from every day of your meal planner. This cannot be undone.',
+    confirmText: 'Yes, Clear All',
+    confirmType: 'danger',
+  });
+  if (ok) document.getElementById('clearPlannerForm').submit();
+}
+</script>

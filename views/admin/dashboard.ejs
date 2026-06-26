@@ -1,0 +1,249 @@
+<% layout("/layouts/boilerplate") %>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="container mt-4 mb-5">
+
+  <!-- Admin Header -->
+  <div class="admin-header mb-4">
+    <div class="admin-badge">
+      <i class="fa-solid fa-shield-halved"></i> Admin Only
+    </div>
+    <h2><i class="fa-solid fa-chart-pie me-2"></i>Analytics Dashboard</h2>
+    <p>Platform overview — recipes, users, engagement, and ratings</p>
+  </div>
+
+  <!-- Metric Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+      <div class="metric-card">
+        <div class="metric-icon" style="background:var(--primary-light);color:var(--primary-dark);">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="metric-num"><%= totalUsers %></div>
+        <div class="metric-label">Total Users</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#DBEAFE;color:#1D4ED8;">
+          <i class="fa-solid fa-utensils"></i>
+        </div>
+        <div class="metric-num"><%= totalRecipes %></div>
+        <div class="metric-label">Total Recipes</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#FEF3C7;color:#92400E;">
+          <i class="fa-solid fa-comment"></i>
+        </div>
+        <div class="metric-num"><%= totalReviews %></div>
+        <div class="metric-label">Total Comments</div>
+      </div>
+    </div>
+    <div class="col-6 col-lg-3">
+      <div class="metric-card">
+        <div class="metric-icon" style="background:#FEE2E2;color:#991B1B;">
+          <i class="fa-solid fa-thumbs-up"></i>
+        </div>
+        <div class="metric-num"><%= totalLikes %></div>
+        <div class="metric-label">Total Likes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Row -->
+  <div class="row g-4 mb-4">
+    <div class="col-md-7">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <i class="fa-solid fa-fire" style="color:var(--orange);"></i> Most Viewed Recipes
+        </div>
+        <div class="chart-card-body">
+          <div class="chart-container">
+            <canvas id="viewsChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-5">
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <i class="fa-solid fa-star" style="color:var(--orange);"></i> Top Rated (Distribution)
+        </div>
+        <div class="chart-card-body">
+          <div class="chart-container">
+            <canvas id="ratingChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tables Row -->
+  <div class="row g-4 mb-4">
+
+    <!-- Most Viewed Table -->
+    <div class="col-md-6">
+      <div class="table-card">
+        <div class="table-card-header">
+          <i class="fa-solid fa-eye" style="color:var(--primary);"></i> Top Viewed Recipes
+        </div>
+        <table class="table mb-0">
+          <tbody>
+            <% mostViewed.forEach((r, i) => { %>
+              <tr>
+                <td style="width:36px;">
+                  <span class="rank-badge <%= i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n' %>">
+                    #<%= i + 1 %>
+                  </span>
+                </td>
+                <td>
+                  <a href="/listings/<%= r._id %>" style="font-weight:600;font-size:0.85rem;color:var(--dark);text-decoration:none;"
+                    onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--dark)'">
+                    <%= r.title %>
+                  </a>
+                </td>
+                <td style="width:100px;text-align:right;">
+                  <span class="badge badge-green" style="font-size:0.72rem;">
+                    <i class="fa-solid fa-eye"></i> <%= r.views %>
+                  </span>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Rated Table -->
+    <div class="col-md-6">
+      <div class="table-card">
+        <div class="table-card-header">
+          <i class="fa-solid fa-trophy" style="color:var(--orange);"></i> Top Rated Recipes
+        </div>
+        <table class="table mb-0">
+          <tbody>
+            <% topRated.forEach((r, i) => { %>
+              <tr>
+                <td style="width:36px;">
+                  <span class="rank-badge <%= i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n' %>">
+                    #<%= i + 1 %>
+                  </span>
+                </td>
+                <td>
+                  <a href="/listings/<%= r._id %>" style="font-weight:600;font-size:0.85rem;color:var(--dark);text-decoration:none;"
+                    onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='var(--dark)'">
+                    <%= r.title %>
+                  </a>
+                  <div style="font-size:0.72rem;color:var(--grey);"><%= r.reviewCount %> reviews</div>
+                </td>
+                <td style="width:80px;text-align:right;">
+                  <span class="badge" style="background:#FEF3C7;color:#92400E;font-size:0.72rem;">
+                    ★ <%= (r.avgRating || 0).toFixed(1) %>
+                  </span>
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Recent Users -->
+  <div class="table-card">
+    <div class="table-card-header">
+      <i class="fa-solid fa-user-plus" style="color:var(--primary);"></i> Recent Users
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="table mb-0">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th style="text-align:right;">Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% recentUsers.forEach(u => { %>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-dark));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.78rem;flex-shrink:0;">
+                    <%= u.username.charAt(0).toUpperCase() %>
+                  </div>
+                  <span style="font-weight:600;font-size:0.88rem;">@<%= u.username %></span>
+                </div>
+              </td>
+              <td style="font-size:0.85rem;color:var(--grey);"><%= u.email %></td>
+              <td>
+                <span class="badge <%= u.role === 'admin' ? '' : '' %>"
+                  style="<%= u.role === 'admin' ? 'background:var(--red);color:white;' : 'background:var(--primary-light);color:var(--primary-dark);' %>">
+                  <%= u.role %>
+                </span>
+              </td>
+              <td style="text-align:right;">
+                <a href="/profile/<%= u.username %>" class="btn btn-outline-primary btn-sm">
+                  View Profile
+                </a>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const viewLabels = [<% mostViewed.forEach(r => { %>"<%= r.title.substring(0,18) %>",<% }); %>];
+const viewData   = [<% mostViewed.forEach(r => { %><%= r.views %>,<% }); %>];
+
+new Chart(document.getElementById('viewsChart'), {
+  type: 'bar',
+  data: {
+    labels: viewLabels,
+    datasets: [{
+      label: 'Views',
+      data: viewData,
+      backgroundColor: '#FF6B35',
+      borderRadius: 8,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, grid: { color: '#f3f4f6' } }
+    }
+  }
+});
+
+const ratingLabels = [<% topRated.forEach(r => { %>"<%= r.title.substring(0,16) %>",<% }); %>];
+const ratingData   = [<% topRated.forEach(r => { %><%= (r.avgRating || 0).toFixed(1) %>,<% }); %>];
+
+new Chart(document.getElementById('ratingChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ratingLabels,
+    datasets: [{
+      label: 'Avg Rating',
+      data: ratingData,
+      backgroundColor: ['#FF6B35','#3B82F6','#F59E0B','#EF4444','#8B5CF6'],
+      borderWidth: 0,
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Poppins' }, padding: 16 } } },
+    cutout: '65%'
+  }
+});
+</script>

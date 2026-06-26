@@ -1,29 +1,272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recipe Haven</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Recipe Haven – Discover, share and enjoy delicious recipes from around the world.">
+  <title>Recipe Haven</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/rating.css">
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/rating.css">
+
+  <style>
+  /* ═══════════════════════════════════════════════
+     RH TOAST NOTIFICATION SYSTEM
+     ═══════════════════════════════════════════════ */
+  #rh-toast-container {
+    position: fixed;
+    bottom: 28px; right: 24px;
+    z-index: 99999;
+    display: flex; flex-direction: column; gap: 10px;
+    max-width: 340px; width: calc(100vw - 48px);
+    pointer-events: none;
+  }
+  .rh-toast {
+    display: flex; align-items: flex-start; gap: 12px;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 14px 14px 14px 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.15), 0 2px 8px rgba(0,0,0,.08);
+    border-left: 4px solid var(--primary);
+    transform: translateX(calc(100% + 32px));
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1), opacity 0.35s ease;
+    position: relative; overflow: hidden;
+    pointer-events: all;
+    font-family: 'Poppins', sans-serif;
+  }
+  .rh-toast.rh-show { transform: translateX(0); opacity: 1; }
+  .rh-toast.rh-hide { transform: translateX(calc(100% + 32px)); opacity: 0; transition-timing-function: ease-in; transition-duration: 0.3s; }
+
+  .rh-toast-success { border-left-color: #22C55E; }
+  .rh-toast-error   { border-left-color: #EF4444; }
+  .rh-toast-warning { border-left-color: #F59E0B; }
+  .rh-toast-info    { border-left-color: #3B82F6; }
+
+  .rh-toast-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; flex-shrink: 0;
+    background: #FFF0EA; color: #FF6B35;
+  }
+  .rh-toast-success .rh-toast-icon { background: #DCFCE7; color: #22C55E; }
+  .rh-toast-error   .rh-toast-icon { background: #FEE2E2; color: #EF4444; }
+  .rh-toast-warning .rh-toast-icon { background: #FEF3C7; color: #D97706; }
+  .rh-toast-info    .rh-toast-icon { background: #EFF6FF; color: #3B82F6; }
+
+  .rh-toast-body   { flex: 1; min-width: 0; }
+  .rh-toast-title  { font-size: 0.82rem; font-weight: 700; color: #2D2D2D; margin: 0 0 2px; }
+  .rh-toast-msg    { font-size: 0.82rem; font-weight: 500; color: #374151; margin: 0; line-height: 1.45; }
+
+  .rh-toast-close {
+    background: none; border: none; padding: 2px 4px;
+    color: #9CA3AF; font-size: 0.85rem; cursor: pointer;
+    flex-shrink: 0; line-height: 1; border-radius: 5px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .rh-toast-close:hover { color: #374151; background: #F3F4F6; }
+
+  .rh-toast-bar {
+    position: absolute; bottom: 0; left: 0; height: 3px;
+    background: #FF6B35; opacity: 0.35;
+    animation: rhBarShrink linear forwards;
+  }
+  .rh-toast-success .rh-toast-bar { background: #22C55E; }
+  .rh-toast-error   .rh-toast-bar { background: #EF4444; }
+  .rh-toast-warning .rh-toast-bar { background: #F59E0B; }
+  .rh-toast-info    .rh-toast-bar { background: #3B82F6; }
+
+  @keyframes rhBarShrink { from { width: 100%; } to { width: 0%; } }
+
+  @media (max-width: 480px) {
+    #rh-toast-container { bottom: 16px; right: 12px; left: 12px; max-width: 100%; width: auto; }
+  }
+
+  /* ═══════════════════════════════════════════════
+     RH CONFIRM MODAL
+     ═══════════════════════════════════════════════ */
+  #rh-confirm-modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+    z-index: 99998;
+    align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.25s ease;
+  }
+  #rh-confirm-modal.rh-open { opacity: 1; }
+
+  .rh-modal-box {
+    background: #ffffff;
+    border-radius: 22px;
+    padding: 38px 32px 30px;
+    max-width: 400px; width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,.18);
+    transform: scale(0.88) translateY(24px);
+    transition: transform 0.32s cubic-bezier(0.34,1.4,0.64,1), opacity 0.25s ease;
+    opacity: 0;
+    font-family: 'Poppins', sans-serif;
+  }
+  #rh-confirm-modal.rh-open .rh-modal-box { transform: scale(1) translateY(0); opacity: 1; }
+
+  .rh-modal-emoji {
+    font-size: 3.2rem; line-height: 1; margin-bottom: 14px; display: block;
+  }
+  .rh-modal-title {
+    font-size: 1.15rem; font-weight: 800; color: #2D2D2D; margin: 0 0 8px;
+  }
+  .rh-modal-message {
+    font-size: 0.88rem; color: #6B7280; line-height: 1.7; margin: 0 0 26px;
+  }
+  .rh-modal-actions {
+    display: flex; gap: 10px; justify-content: center;
+  }
+  .rh-mbtn {
+    padding: 10px 26px; border-radius: 999px;
+    font-family: 'Poppins', sans-serif; font-size: 0.88rem; font-weight: 700;
+    border: none; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .rh-mbtn-cancel  { background: #F3F4F6; color: #374151; border: 1.5px solid #E5E7EB; }
+  .rh-mbtn-cancel:hover  { background: #E5E7EB; }
+  .rh-mbtn-danger  { background: #EF4444; color: white; }
+  .rh-mbtn-danger:hover  { background: #DC2626; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239,68,68,.3); }
+  .rh-mbtn-primary { background: #FF6B35; color: white; }
+  .rh-mbtn-primary:hover { background: #E85520; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,107,53,.3); }
+  .rh-mbtn-warning { background: #F59E0B; color: white; }
+  .rh-mbtn-warning:hover { background: #D97706; transform: translateY(-1px); }
+  </style>
 </head>
 <body>
-    <%- include("../includes/navbar") %>
-    <div class="container">
-        <%- include("../includes/flash.ejs") %>
-        <%- body -%>
+
+  <%- include("../includes/navbar") %>
+
+  <!-- Page Content -->
+  <%- body -%>
+
+  <%- include("../includes/footer") %>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Global Scripts -->
+  <script src="/js/script.js"></script>
+
+  <!-- ── Toast Container ───────────────────────────────────────── -->
+  <div id="rh-toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <!-- ── Confirm Modal ─────────────────────────────────────────── -->
+  <div id="rh-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="rh-modal-title" style="display:none;">
+    <div class="rh-modal-box">
+      <span class="rh-modal-emoji" id="rh-modal-emoji">⚠️</span>
+      <h3 class="rh-modal-title"  id="rh-modal-title">Are you sure?</h3>
+      <p  class="rh-modal-message" id="rh-modal-message">This action cannot be undone.</p>
+      <div class="rh-modal-actions">
+        <button class="rh-mbtn rh-mbtn-cancel"  id="rh-modal-cancel">Cancel</button>
+        <button class="rh-mbtn rh-mbtn-danger"  id="rh-modal-confirm">Confirm</button>
+      </div>
     </div>
-    <%- include("../includes/footer") %>
+  </div>
 
+  <!-- ── Global RH UI Functions ────────────────────────────────── -->
+  <script>
+  /* ── Toast ─────────────────────────────────────────────────────
+     Usage: rhToast('Message', 'success'|'error'|'warning'|'info', ms)
+  ──────────────────────────────────────────────────────────────── */
+  function rhToast(message, type, duration) {
+    type     = type     || 'success';
+    duration = duration || 4000;
+    var c = document.getElementById('rh-toast-container');
+    if (!c) return;
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/script.js"></script>
-    
+    var icons = { success:'fa-circle-check', error:'fa-circle-xmark', warning:'fa-triangle-exclamation', info:'fa-circle-info' };
+    var t = document.createElement('div');
+    t.className = 'rh-toast rh-toast-' + type;
+    t.setAttribute('role', 'alert');
+    t.innerHTML =
+      '<div class="rh-toast-icon"><i class="fa-solid ' + (icons[type] || 'fa-circle-info') + '"></i></div>' +
+      '<div class="rh-toast-body"><p class="rh-toast-msg">' + message + '</p></div>' +
+      '<button class="rh-toast-close" aria-label="Dismiss"><i class="fa-solid fa-xmark"></i></button>' +
+      '<div class="rh-toast-bar" style="animation-duration:' + duration + 'ms"></div>';
+
+    t.querySelector('.rh-toast-close').addEventListener('click', function() { _rhDismiss(t); });
+    c.appendChild(t);
+
+    /* double rAF ensures the initial transform is painted before adding show class */
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() { t.classList.add('rh-show'); });
+    });
+
+    setTimeout(function() { _rhDismiss(t); }, duration);
+  }
+
+  function _rhDismiss(t) {
+    if (!t.parentElement) return;
+    t.classList.remove('rh-show');
+    t.classList.add('rh-hide');
+    t.addEventListener('transitionend', function() { t.remove(); }, { once: true });
+  }
+
+  /* ── Confirm Modal ─────────────────────────────────────────────
+     Usage: const ok = await rhConfirm({ title, message, icon,
+              confirmText, confirmType:'danger'|'primary'|'warning' })
+  ──────────────────────────────────────────────────────────────── */
+  function rhConfirm(opts) {
+    opts = opts || {};
+    return new Promise(function(resolve) {
+      var overlay    = document.getElementById('rh-confirm-modal');
+      var confirmBtn = document.getElementById('rh-modal-confirm');
+      var cancelBtn  = document.getElementById('rh-modal-cancel');
+
+      document.getElementById('rh-modal-emoji').textContent   = opts.icon        || '⚠️';
+      document.getElementById('rh-modal-title').textContent   = opts.title       || 'Are you sure?';
+      document.getElementById('rh-modal-message').textContent = opts.message     || 'This action cannot be undone.';
+      confirmBtn.textContent = opts.confirmText || 'Confirm';
+      confirmBtn.className   = 'rh-mbtn rh-mbtn-' + (opts.confirmType || 'danger');
+
+      overlay.style.display = 'flex';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() { overlay.classList.add('rh-open'); });
+      });
+
+      function close(result) {
+        overlay.classList.remove('rh-open');
+        setTimeout(function() { overlay.style.display = 'none'; }, 300);
+        /* clone buttons to drop all stale listeners */
+        confirmBtn.replaceWith(confirmBtn.cloneNode(true));
+        cancelBtn.replaceWith(cancelBtn.cloneNode(true));
+        resolve(result);
+      }
+
+      /* re-query after clone */
+      document.getElementById('rh-modal-confirm').addEventListener('click', function() { close(true);  }, { once: true });
+      document.getElementById('rh-modal-cancel' ).addEventListener('click', function() { close(false); }, { once: true });
+      overlay.addEventListener('click', function handler(e) {
+        if (e.target === overlay) { overlay.removeEventListener('click', handler); close(false); }
+      });
+    });
+  }
+  </script>
+
+  <!-- Navbar scroll effect -->
+  <script>
+    var _nb = document.querySelector('.rh-navbar');
+    if (_nb) window.addEventListener('scroll', function() { _nb.classList.toggle('scrolled', window.scrollY > 20); }, { passive: true });
+  </script>
+
+  <!-- Flash → Toast (fires after rhToast is defined above) -->
+  <%- include("../includes/flash.ejs") %>
+
 </body>
 </html>

@@ -1,75 +1,159 @@
 <% layout("/layouts/boilerplate") %>
-<body>
-    <div class="container mt-4 mb-4">
-        <h2>Add New Recipe</h2>
 
-        <form class="row g-3 needs-validation" action="/listings" method="post" novalidate enctype="multipart/form-data">
+<!-- Page Header -->
+<div class="form-page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-plus-circle me-2"></i>Add New Recipe</h1>
+    <p>Share your culinary creation with our community of food lovers</p>
+  </div>
+</div>
 
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Title</label>
-                <input type="text" name="listing[title]" class="form-control" id="inputAddress" placeholder="Title of recipe" required>
+<div class="container" style="max-width:820px;padding:40px 20px 60px;">
 
-                <div class="valid-feedback">
-                    Title of Recipe Looks good!
-                  </div>
-            </div><br>
+  <form class="needs-validation" action="/listings" method="post" novalidate enctype="multipart/form-data">
 
-            <div class="col-12">
-                <label for="inputAddress" class="form-label">Description</label>
-                <textarea rows="4"  name="listing[description]" class="form-control" required id="inputAddress"></textarea>
+    <!-- Basic Info -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <i class="fa-solid fa-circle-info" style="color:var(--primary);"></i> Basic Information
+      </div>
+      <div class="form-section-body">
+        <div class="mb-3">
+          <label class="form-label">Recipe Title *</label>
+          <input type="text" name="listing[title]" class="form-control"
+            placeholder="e.g. Spicy Paneer Tikka Masala" required>
+          <div class="valid-feedback"><i class="fa-solid fa-check"></i> Looks great!</div>
+          <div class="invalid-feedback">Please provide a recipe title.</div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Description *</label>
+          <textarea rows="4" name="listing[description]" class="form-control"
+            placeholder="Describe your recipe — what makes it special, what it tastes like…" required></textarea>
+          <div class="invalid-feedback">Description is required.</div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">Country of Origin *</label>
+            <input type="text" name="listing[country_of_recipe]" class="form-control"
+              placeholder="e.g. India" required>
+            <div class="invalid-feedback">Please provide country name.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Category *</label>
+            <input type="text" name="listing[category]" class="form-control"
+              placeholder="e.g. Breakfast, Dinner, Dessert" required>
+            <div class="invalid-feedback">Please provide a category.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-                <div class="invalid-feedback">
-                    Description is required!
-                  </div>
-            </div><br>
+    <!-- Cooking Details -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <i class="fa-solid fa-fire-flame-curved" style="color:var(--orange);"></i> Cooking Details
+      </div>
+      <div class="form-section-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Cook Time (display) *</label>
+            <input type="text" name="listing[cooking_time]" class="form-control"
+              placeholder="e.g. 30 minutes" required>
+            <div class="invalid-feedback">Please provide cooking time.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Cook Time (minutes) *</label>
+            <input type="number" name="listing[cookingMinutes]" class="form-control"
+              placeholder="e.g. 30" min="1" required>
+            <div class="invalid-feedback">Please enter minutes.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Diet Type *</label>
+            <select name="listing[diet]" class="form-select" required>
+              <option value="">Select type…</option>
+              <option value="vegetarian">🥗 Vegetarian</option>
+              <option value="non-vegetarian">🍗 Non-Vegetarian</option>
+              <option value="vegan">🌱 Vegan</option>
+            </select>
+            <div class="invalid-feedback">Please select a diet type.</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">Cooking time</label>
-                <input type="text" name="listing[cooking_time]" class="form-control" id="inputPassword4" required>
-                <div class="invalid-feedback">
-                    Please give valid cooking time!
-                </div>
-            </div><br>
-            <div class="col-md-6">
-            <label for="inputPassword4" class="form-label">Ingredients</label>
-            <input type="text"  name="listing[ingredients]" class="form-control" id="inputPassword4" required>
+    <!-- Ingredients -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <i class="fa-solid fa-list-check" style="color:var(--primary);"></i> Ingredients
+      </div>
+      <div class="form-section-body">
+        <label class="form-label">Ingredients (comma-separated) *</label>
+        <textarea rows="3" name="listing[ingredients]" class="form-control"
+          placeholder="e.g. 200g paneer, 1 cup yogurt, 2 tbsp garam masala, 1 lemon…" required></textarea>
+        <p style="font-size:0.78rem;color:var(--grey);margin-top:6px;">
+          <i class="fa-solid fa-circle-info me-1"></i> Separate each ingredient with a comma.
+        </p>
+        <div class="invalid-feedback">At least one ingredient is required.</div>
+      </div>
+    </div>
 
-            <div class="invalid-feedback">
-                At least one ingredient is required.
-            </div>
-            </div><br>
-            <div class="col-md-6">
-                <label for="inputEmail4" class="form-label">Country of Recipe</label>
-                <input type="text" name="listing[country_of_recipe]" class="form-control" id="inputEmail4" required>
-                <div class="invalid-feedback">
-                    Please provide valid country name!
-                </div>
-            </div><br>
-            <div class="col-md-6">
-                <label for="inputPassword4" class="form-label">Category</label>
-                <input type="text" name="listing[category]" class="form-control" id="inputPassword4" required>
-                <div class="invalid-feedback">
-                    Please provide valid category of recipe.
-                </div>
-            </div><br>
-          
-            <div class="col-12">
-            <label for="inputAddress" class="form-label">Instructions</label>
-            <textarea rows="4" name="listing[instructions]" class="form-control" id="inputAddress" placeholder="How I cook" required></textarea>
-            <div class="invalid-feedback">
-                At least 3 instructions are required
-            </div>
-            </div><br>
-            <div class="col-12">
-            <label for="inputAddress2" class="form-label">Image</label>
-            <input type="file" name="listing[image]" class="form-control" id="inputAddress2" required>
-            </div><br>
+    <!-- Instructions -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <i class="fa-solid fa-list-ol" style="color:var(--primary);"></i> Step-by-step Instructions
+      </div>
+      <div class="form-section-body">
+        <label class="form-label">Instructions *</label>
+        <textarea rows="6" name="listing[instructions]" class="form-control"
+          placeholder="Step 1: Marinate the paneer in yogurt and spices for 30 minutes.&#10;Step 2: Thread onto skewers with peppers and onions.&#10;Step 3: Grill for 15–20 minutes, turning occasionally…" required></textarea>
+        <p style="font-size:0.78rem;color:var(--grey);margin-top:6px;">
+          <i class="fa-solid fa-circle-info me-1"></i> Each new line will be treated as a separate step.
+        </p>
+        <div class="invalid-feedback">Instructions are required.</div>
+      </div>
+    </div>
 
-            <div class="col-12">
-            <button type="submit" class="btn btn-primary">Add</button>
-            </div>
-        </form>
-    </div>    
+    <!-- Image Upload -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <i class="fa-solid fa-image" style="color:var(--primary);"></i> Recipe Image
+      </div>
+      <div class="form-section-body">
+        <div class="image-upload-area" onclick="document.getElementById('imageInput').click();">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <p style="font-size:1rem;font-weight:600;color:var(--dark);margin:8px 0 4px;">Click to upload image</p>
+          <p>PNG, JPG, WEBP up to 10MB</p>
+        </div>
+        <input type="file" id="imageInput" name="listing[image]" class="form-control d-none"
+          accept="image/*" required onchange="previewImage(this)">
+        <img id="imagePreview" alt="Image preview">
+      </div>
+    </div>
 
-</body>
-</html>
+    <!-- Submit -->
+    <div class="d-flex gap-3 justify-content-end">
+      <a href="/listings" class="btn btn-outline-secondary btn-lg">
+        <i class="fa-solid fa-xmark"></i> Cancel
+      </a>
+      <button type="submit" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-paper-plane"></i> Publish Recipe
+      </button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+function previewImage(input) {
+  const preview = document.getElementById('imagePreview');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      document.querySelector('.image-upload-area p:first-of-type').textContent = input.files[0].name;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>

@@ -1,100 +1,472 @@
 <% layout("/layouts/boilerplate") %>
 
-<body>
-    <div class="about">
-        <h2>Privacy Policy for Recipe Haven</h2>
+<!-- Privacy Hero -->
+<div class="privacy-hero">
+  <div class="container text-center">
+    <div class="privacy-hero-icon">
+      <i class="fa-solid fa-shield-halved"></i>
     </div>
-    <div class="container">
-       <div class="div1">
-        <span>
-            At Recipe Haven, we value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data when you use our website, located at www.recipehaven.com.
-
-        </span><br>
-       </div>
-
-       <div class="div2"><br>
-        <h3>Information We Collect</h3>
-        <span>
-            We may collect the following types of information:
-             </span><br>
-             <ul>
-                <br>
-                <li><b>Personal Information: </b>When you sign up for an account, submit a recipe, or leave a comment, we collect information such as your name, email address, and any other information you voluntarily provide.</li>
-                <li><b>Non Personal Information: </b>We may also collect non-personal information such as browser type, IP address, device type, and usage data to improve your experience on the site.</li>
-                <br>
-            </ul>
-       </div>
-
-       <div class="div3">
-        <h3>How We Use Your Information</h3><br>
-        <span>The information we collect is used for the following purposes:
-
-        </span><br>
-
-        <ul>
-            
-            <li><b>Account Management:  </b>To create and manage your account on Recipe Haven.</li>
-            <li><b>Recipe Submission and Interaction: </b>To allow you to submit, share, and interact with recipes and other users on the platform.</li>
-            <li><b>Communication: </b>To send you updates, newsletters, or respond to inquiries, if you’ve opted to receive such communications.
-            </li>
-            <li><b>Improving User Experience: </b>To analyze user behavior and preferences, helping us to enhance our website and services.
-            </li>
-        </ul>
-        <br>
-       </div>
-
-       <div class="div4">
-        <h3>Cookies</h3>
-        <span>
-            Recipe Haven uses cookies to enhance your browsing experience. Cookies are small files stored on your device that help us remember your preferences and track site usage. You can control the use of cookies through your browser settings.
-
-
-        </span><br>
+    <h1>Privacy Policy</h1>
+    <p>Last updated: June 2026 &middot; We respect your privacy and protect your data.</p>
+    <div class="privacy-badges">
+      <span class="privacy-badge"><i class="fa-solid fa-lock"></i> Data Encrypted</span>
+      <span class="privacy-badge"><i class="fa-solid fa-eye-slash"></i> No Data Selling</span>
+      <span class="privacy-badge"><i class="fa-solid fa-bell-slash"></i> Opt-Out Anytime</span>
     </div>
+  </div>
+</div>
 
-       <div class="div4"><br>
-        <h3>Third Party Services</h3>
+<div class="container privacy-body">
+
+  <!-- Quick Summary -->
+  <div class="privacy-summary-card">
+    <div class="privacy-summary-title">
+      <i class="fa-solid fa-bolt" style="color:var(--orange);"></i>
+      The Short Version
+    </div>
+    <div class="privacy-summary-grid">
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>We collect only what we need</span></div>
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>We never sell your data</span></div>
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>Delete your account anytime</span></div>
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>Email notifications you can opt out of</span></div>
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>Newsletter: one-click unsubscribe</span></div>
+      <div class="privacy-summary-item good"><i class="fa-solid fa-check"></i><span>HTTPS &amp; secure encrypted sessions</span></div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <nav class="privacy-toc">
+    <p class="privacy-toc-title">Jump to section:</p>
+    <div class="privacy-toc-links">
+      <a href="#collect">Data We Collect</a>
+      <a href="#use">How We Use It</a>
+      <a href="#email">Email Notifications</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="#cookies">Cookies</a>
+      <a href="#security">Security</a>
+      <a href="#rights">Your Rights</a>
+      <a href="#third-party">Third Parties</a>
+      <a href="#contact">Contact Us</a>
+    </div>
+  </nav>
+
+  <!-- 1: Data We Collect -->
+  <div class="privacy-card" id="collect">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#FFF0EA;color:var(--primary);"><i class="fa-solid fa-database"></i></div>
+      <div>
+        <h2>1. Information We Collect</h2>
+        <p>Data you give us and data we observe automatically</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-section-label">When you create an account</div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Username</strong> — displayed publicly on your profile and recipes</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Email address</strong> — used for login, notifications, and account recovery. Never shown publicly.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Password</strong> — stored as a salted hash via Passport.js. We never store or see your plaintext password.</div></div>
+
+      <div class="privacy-section-label" style="margin-top:18px;">When you use the platform</div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Recipes, reviews, and meal plans</strong> you create or save — stored in our database</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Interactions</strong> — likes, follows, grocery lists, and recipe saves</div></div>
+
+      <div class="privacy-section-label" style="margin-top:18px;">Automatically collected</div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Log data</strong> — browser type, IP address, pages visited, timestamps (for security and debugging)</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Session data</strong> — kept in a secure, encrypted MongoDB session store to keep you logged in</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div><strong>Recipe images</strong> — uploaded to Cloudinary over HTTPS. Not stored on our own servers.</div></div>
+    </div>
+  </div>
+
+  <!-- 2: How We Use It -->
+  <div class="privacy-card" id="use">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#EFF6FF;color:#3B82F6;"><i class="fa-solid fa-gears"></i></div>
+      <div>
+        <h2>2. How We Use Your Information</h2>
+        <p>Only for running Recipe Haven — never for ads or resale</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <% const uses = [
+        { icon: 'fa-user-circle',   label: 'Account management',  text: 'Create, maintain, and secure your Recipe Haven account.' },
+        { icon: 'fa-utensils',      label: 'Recipe features',      text: 'Enable recipe submission, likes, reviews, saving, and following other cooks.' },
+        { icon: 'fa-bell',          label: 'In-app notifications', text: 'Notify you when someone likes your recipe, leaves a review, or follows you.' },
+        { icon: 'fa-envelope',      label: 'Email notifications',  text: 'Send transactional emails (likes, comments, follows) to your registered email.' },
+        { icon: 'fa-newspaper',     label: 'Newsletter',           text: 'Send recipe inspiration and updates if you opted in via the footer subscribe form.' },
+        { icon: 'fa-chart-line',    label: 'Analytics',            text: 'Understand popular recipes and improve the platform. Data is aggregated, not personal.' },
+        { icon: 'fa-shield-halved', label: 'Security',             text: 'Detect abuse, prevent spam, and protect accounts using session and login data.' },
+      ] %>
+      <% uses.forEach(u => { %>
+        <div class="privacy-item-row">
+          <div class="privacy-use-icon"><i class="fa-solid <%= u.icon %>"></i></div>
+          <div>
+            <strong><%= u.label %></strong>
+            <span style="color:var(--grey);font-size:0.85rem;display:block;margin-top:2px;"><%= u.text %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- 3: Email Notifications -->
+  <div class="privacy-card" id="email">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#FEF3C7;color:#D97706;"><i class="fa-solid fa-bell"></i></div>
+      <div>
+        <h2>3. Email Notifications</h2>
+        <p>Triggered by interactions on your recipes and profile</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <p style="font-size:0.9rem;line-height:1.8;color:var(--dark);margin-bottom:18px;">
+        As a registered user, Recipe Haven sends transactional email notifications when other users interact with your content.
+      </p>
+      <div class="privacy-notif-table">
+        <div class="privacy-notif-row header"><span>Event</span><span>Trigger</span><span>Recipient</span></div>
+        <div class="privacy-notif-row">
+          <span><i class="fa-solid fa-heart" style="color:var(--red);"></i> Like</span>
+          <span>Someone likes your recipe</span>
+          <span>Recipe owner</span>
+        </div>
+        <div class="privacy-notif-row">
+          <span><i class="fa-solid fa-comment" style="color:#3B82F6;"></i> Review</span>
+          <span>Someone reviews your recipe</span>
+          <span>Recipe owner</span>
+        </div>
+        <div class="privacy-notif-row">
+          <span><i class="fa-solid fa-user-plus" style="color:var(--green);"></i> Follow</span>
+          <span>Someone follows your profile</span>
+          <span>Followed user</span>
+        </div>
+      </div>
+      <div class="privacy-callout">
+        <i class="fa-solid fa-circle-info" style="color:var(--primary);flex-shrink:0;"></i>
         <span>
-            We may use third-party service providers to assist with certain aspects of our website, such as hosting, analytics, and email delivery. These providers have access to your information only to perform these tasks on our behalf and are obligated to protect your information in accordance with this Privacy Policy.</span><br>
-       </div><br>
-
-       <div class="div4"><br>
-        <h3>Data Security</h3>
-        <span>
-            We take the security of your personal information seriously. We implement industry-standard security measures to protect your data from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet is 100% secure, and we cannot guarantee absolute security.
-        </span><br>
-       </div>
-
-       <div class="div4">
-        <br>
-        <h3>Your Rights</h3>
-        <ul>
-            <li><b>Access: </b>the personal information we hold about you.</li>
-            <li><b>Update and Correct: </b>inaccuracies in your information.</li>
-            <li><b>Delete: </b>your account and any associated data.</li>
-            <li><b>OPT-OUT: </b>of receiving promotional communications from us at any time by following the unsubscribe instructions provided in emails or by contacting us directly.
-            </li>
-        </ul>
-       </div>
-
-       <div class="DIV4">
-            
-            <h3>Changes to this privacy</h3>
-            <span>
-                We may update this Privacy Policy from time to time to reflect changes in our practices or legal requirements. When we do, we will post the updated policy on this page and revise the "Last Updated" date at the top.
-            </span>
-       </div>
-
-       <div class="div4"><br>
-        <h3>Conatct us</h3>
-        <span>
-            If you have any questions or concerns about our Privacy Policy or how your data is handled, please contact us at:<br>
-
-            <b>Email: </b>privacy@recipehaven.com
-            <br><br>
-
-
+          To stop receiving these emails, contact us at
+          <a href="mailto:privacy@recipehaven.com">privacy@recipehaven.com</a> and we'll disable them for your account.
+          Notifications will still appear in-app via the bell icon.
         </span>
-       </div>
+      </div>
     </div>
-</body>
+  </div>
+
+  <!-- 4: Newsletter -->
+  <div class="privacy-card" id="newsletter">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#DCFCE7;color:var(--green-dark);"><i class="fa-solid fa-newspaper"></i></div>
+      <div>
+        <h2>4. Newsletter &amp; Subscriptions</h2>
+        <p>Completely opt-in — you control your inbox</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>The newsletter is <strong>entirely opt-in</strong>. Only users who enter their email in the footer form are subscribed.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>On subscription, your email is stored and a <strong>welcome email with an unsubscribe link</strong> is sent immediately.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>Every newsletter email contains a <strong>unique one-click unsubscribe link</strong> — no login needed, no form to fill.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>We <strong>never share, rent, or sell</strong> subscriber email addresses to third parties.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>Newsletter subscriptions are <strong>stored separately</strong> from user accounts — no account is required to subscribe.</div></div>
+    </div>
+  </div>
+
+  <!-- 5: Cookies -->
+  <div class="privacy-card" id="cookies">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#FFF7ED;color:var(--orange);"><i class="fa-solid fa-cookie-bite"></i></div>
+      <div>
+        <h2>5. Cookies &amp; Sessions</h2>
+        <p>Used to keep you logged in — nothing more</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-cookie-table">
+        <div class="privacy-cookie-row header"><span>Cookie</span><span>Purpose</span><span>Duration</span></div>
+        <div class="privacy-cookie-row">
+          <code>connect.sid</code>
+          <span>Session authentication — keeps you logged in</span>
+          <span>7 days</span>
+        </div>
+        <div class="privacy-cookie-row">
+          <code>flash</code>
+          <span>One-time success/error messages after redirects</span>
+          <span>Single request</span>
+        </div>
+      </div>
+      <div class="privacy-callout">
+        <i class="fa-solid fa-circle-info" style="color:var(--primary);flex-shrink:0;"></i>
+        <span>
+          We do not use advertising cookies, Google Analytics, or tracking pixels.
+          Disabling cookies in your browser will prevent you from logging in.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6: Security -->
+  <div class="privacy-card" id="security">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#FEE2E2;color:var(--red);"><i class="fa-solid fa-lock"></i></div>
+      <div>
+        <h2>6. Data Security</h2>
+        <p>Industry-standard protections for your information</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <% const security = [
+        { icon: 'fa-key',                label: 'Password hashing',   text: 'Passwords are salted and hashed using PBKDF2 via passport-local-mongoose. We cannot recover your password.' },
+        { icon: 'fa-server',             label: 'Encrypted sessions', text: 'Session data is encrypted using AES-256 in MongoDB. Session cookies are httpOnly and expire after 7 days.' },
+        { icon: 'fa-cloud',              label: 'Cloud image storage',text: 'Recipe images are stored on Cloudinary over HTTPS. We do not keep uploads locally.' },
+        { icon: 'fa-database',           label: 'MongoDB Atlas',      text: 'Database hosted on MongoDB Atlas with network access controls and encrypted connections (TLS/SSL).' },
+        { icon: 'fa-triangle-exclamation', label: 'Limitation',       text: 'No internet transmission is 100% secure. We use industry-standard protections, but cannot guarantee absolute security.' },
+      ] %>
+      <% security.forEach(s => { %>
+        <div class="privacy-item-row">
+          <div class="privacy-use-icon"><i class="fa-solid <%= s.icon %>"></i></div>
+          <div>
+            <strong><%= s.label %></strong>
+            <span style="color:var(--grey);font-size:0.85rem;display:block;margin-top:2px;"><%= s.text %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+
+  <!-- 7: Your Rights -->
+  <div class="privacy-card" id="rights">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#EFF6FF;color:#3B82F6;"><i class="fa-solid fa-user-shield"></i></div>
+      <div>
+        <h2>7. Your Rights &amp; Controls</h2>
+        <p>You own your data — here's what you can do</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-rights-grid">
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-eye"></i></div>
+          <div><strong>Access</strong><p>Request a copy of the personal data we hold about you.</p></div>
+        </div>
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-pen"></i></div>
+          <div><strong>Correct</strong><p>Update inaccurate information via your profile page.</p></div>
+        </div>
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-trash"></i></div>
+          <div><strong>Delete</strong><p>Request full deletion of your account and data by emailing us.</p></div>
+        </div>
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-bell-slash"></i></div>
+          <div><strong>Unsubscribe</strong><p>One-click unsubscribe link in every newsletter email.</p></div>
+        </div>
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-download"></i></div>
+          <div><strong>Portability</strong><p>Request an export of your recipes and profile data.</p></div>
+        </div>
+        <div class="privacy-right-item">
+          <div class="privacy-right-icon"><i class="fa-solid fa-hand"></i></div>
+          <div><strong>Object</strong><p>Object to processing we cannot legally justify.</p></div>
+        </div>
+      </div>
+      <div class="privacy-callout">
+        <i class="fa-solid fa-circle-info" style="color:var(--primary);flex-shrink:0;"></i>
+        <span>
+          Email <a href="mailto:privacy@recipehaven.com" style="font-weight:700;color:var(--primary);">privacy@recipehaven.com</a> to exercise any right. We respond within 30 days.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8: Third Parties -->
+  <div class="privacy-card" id="third-party">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#F3F4F6;color:#6B7280;"><i class="fa-solid fa-link"></i></div>
+      <div>
+        <h2>8. Third-Party Services</h2>
+        <p>External services we use to run Recipe Haven</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-third-table">
+        <div class="privacy-third-row header"><span>Service</span><span>What it handles</span><span>Privacy</span></div>
+        <div class="privacy-third-row">
+          <strong>MongoDB Atlas</strong>
+          <span>Database hosting (users, recipes, sessions)</span>
+          <a href="https://www.mongodb.com/legal/privacy-policy" target="_blank" rel="noopener">↗ View</a>
+        </div>
+        <div class="privacy-third-row">
+          <strong>Cloudinary</strong>
+          <span>Recipe image storage and delivery</span>
+          <a href="https://cloudinary.com/privacy" target="_blank" rel="noopener">↗ View</a>
+        </div>
+        <div class="privacy-third-row">
+          <strong>Google (Gmail)</strong>
+          <span>Outgoing email delivery (SMTP)</span>
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">↗ View</a>
+        </div>
+      </div>
+      <div class="privacy-callout">
+        <i class="fa-solid fa-circle-info" style="color:var(--primary);flex-shrink:0;"></i>
+        <span>
+          We share only the minimum data required for each service to function.
+          We do not use Facebook Pixel, Google Analytics, or any advertising platforms.
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9: Changes -->
+  <div class="privacy-card" id="changes">
+    <div class="privacy-card-header">
+      <div class="privacy-card-icon" style="background:#F5F3FF;color:#7C3AED;"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      <div>
+        <h2>9. Changes to This Policy</h2>
+        <p>We'll let you know if anything significant changes</p>
+      </div>
+    </div>
+    <div class="privacy-card-body">
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>Minor changes take effect immediately with an updated "last updated" date.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>For significant changes affecting your rights, we'll email you and post a site notice at least 7 days before the change.</div></div>
+      <div class="privacy-item-row"><span class="privacy-item-dot"></span><div>Continued use of Recipe Haven after a policy change constitutes acceptance of the new terms.</div></div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="privacy-contact-card" id="contact">
+    <div class="privacy-contact-icon">
+      <i class="fa-solid fa-envelope-open-text"></i>
+    </div>
+    <h3>Questions about your privacy?</h3>
+    <p>
+      We're here to help. Email us and we'll respond within 30 days — usually much faster.
+    </p>
+    <a href="mailto:privacy@recipehaven.com" class="privacy-contact-btn">
+      <i class="fa-solid fa-envelope me-2"></i>privacy@recipehaven.com
+    </a>
+    <div class="privacy-back-link">
+      <a href="/listings/about"><i class="fa-solid fa-arrow-left me-1"></i> Back to About</a>
+      <span style="color:var(--border);padding:0 10px;">|</span>
+      <a href="/listings">Explore Recipes</a>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ── Privacy Page Styles ─────────────────────────────────── -->
+<style>
+.privacy-hero {
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, #F59E0B 100%);
+  padding: 56px 0 44px; color: white;
+}
+.privacy-hero-icon {
+  width: 64px; height: 64px; background: rgba(255,255,255,0.18); border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; margin: 0 auto 18px;
+}
+.privacy-hero h1 { font-size: 2.2rem; font-weight: 800; margin: 0 0 8px; color: white; }
+.privacy-hero p  { color: rgba(255,255,255,0.82); font-size: 0.95rem; margin: 0 0 20px; }
+.privacy-badges  { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.privacy-badge {
+  background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  color: white; border-radius: 999px; padding: 5px 14px;
+  font-size: 0.78rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;
+}
+
+.privacy-body { max-width: 820px; padding: 48px 20px 80px; }
+
+.privacy-summary-card {
+  background: white; border-radius: 18px; padding: 26px 28px;
+  margin-bottom: 28px; box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+}
+.privacy-summary-title { font-weight: 800; font-size: 1rem; color: var(--dark); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.privacy-summary-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.privacy-summary-item  { display: flex; align-items: center; gap: 9px; font-size: 0.86rem; color: var(--dark); }
+.privacy-summary-item.good i { color: var(--green); }
+
+.privacy-toc { background: var(--bg); border-radius: 12px; padding: 14px 20px; margin-bottom: 28px; border: 1px solid var(--border); }
+.privacy-toc-title { font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--grey); margin-bottom: 10px; }
+.privacy-toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
+.privacy-toc-links a {
+  font-size: 0.8rem; font-weight: 600; color: var(--dark); text-decoration: none;
+  padding: 4px 12px; background: white; border-radius: 999px;
+  border: 1px solid var(--border); transition: all 0.15s;
+}
+.privacy-toc-links a:hover { background: var(--primary-light); color: var(--primary); border-color: var(--primary); }
+
+.privacy-card { background: white; border-radius: 18px; margin-bottom: 24px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); overflow: hidden; }
+.privacy-card-header { padding: 22px 28px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+.privacy-card-icon   { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.privacy-card-header h2 { font-size: 1.08rem; font-weight: 800; color: var(--dark); margin: 0 0 3px; }
+.privacy-card-header p  { font-size: 0.82rem; color: var(--grey); margin: 0; }
+.privacy-card-body { padding: 22px 28px; }
+
+.privacy-section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--grey); margin-bottom: 10px; }
+.privacy-item-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0; border-bottom: 1px solid var(--bg);
+  font-size: 0.88rem; color: var(--dark); line-height: 1.6;
+}
+.privacy-item-row:last-child { border-bottom: none; }
+.privacy-item-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--primary); flex-shrink: 0; margin-top: 6px; }
+.privacy-use-icon { width: 32px; height: 32px; border-radius: 8px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; flex-shrink: 0; }
+
+.privacy-notif-table, .privacy-cookie-table, .privacy-third-table {
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px;
+}
+.privacy-notif-row, .privacy-cookie-row, .privacy-third-row {
+  display: grid; gap: 12px; padding: 11px 16px;
+  font-size: 0.85rem; border-bottom: 1px solid var(--border); align-items: center;
+}
+.privacy-notif-row:last-child, .privacy-cookie-row:last-child, .privacy-third-row:last-child { border-bottom: none; }
+.privacy-notif-row  { grid-template-columns: 110px 1fr 100px; }
+.privacy-cookie-row { grid-template-columns: 130px 1fr 110px; }
+.privacy-third-row  { grid-template-columns: 140px 1fr 80px; }
+.privacy-notif-row.header, .privacy-cookie-row.header, .privacy-third-row.header {
+  background: var(--bg); font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.06em; color: var(--grey);
+}
+.privacy-third-row a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.privacy-third-row a:hover { text-decoration: underline; }
+code { background: var(--bg); color: var(--primary-dark); padding: 2px 6px; border-radius: 5px; font-size: 0.82rem; }
+
+.privacy-callout {
+  background: var(--primary-light); border-radius: 10px; padding: 14px 16px;
+  font-size: 0.85rem; color: var(--dark); line-height: 1.65;
+  display: flex; gap: 11px; align-items: flex-start;
+}
+.privacy-callout a { color: var(--primary); font-weight: 600; }
+
+.privacy-rights-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+.privacy-right-item  { display: flex; gap: 12px; align-items: flex-start; }
+.privacy-right-icon  { width: 36px; height: 36px; border-radius: 9px; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+.privacy-right-item strong { font-size: 0.88rem; color: var(--dark); display: block; }
+.privacy-right-item p { font-size: 0.8rem; color: var(--grey); margin: 3px 0 0; line-height: 1.5; }
+
+.privacy-contact-card {
+  background: linear-gradient(135deg, var(--primary-light) 0%, #FFE5CC 100%);
+  border-radius: 20px; padding: 44px 36px; text-align: center;
+  border: 1px solid rgba(255,107,53,0.2); margin-top: 12px;
+}
+.privacy-contact-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 16px; }
+.privacy-contact-card h3 { font-size: 1.4rem; font-weight: 800; color: var(--dark); margin-bottom: 10px; }
+.privacy-contact-card p  { font-size: 0.9rem; color: var(--grey); margin: 0 auto 22px; max-width: 420px; }
+.privacy-contact-btn {
+  display: inline-flex; align-items: center;
+  background: var(--primary); color: white; padding: 12px 28px; border-radius: 999px;
+  font-weight: 700; font-size: 0.9rem; text-decoration: none; margin-bottom: 20px; transition: all 0.2s;
+}
+.privacy-contact-btn:hover { background: var(--primary-dark); color: white; transform: translateY(-1px); }
+.privacy-back-link { font-size: 0.85rem; color: var(--grey); display: flex; align-items: center; justify-content: center; gap: 0; }
+.privacy-back-link a { color: var(--primary); font-weight: 600; text-decoration: none; }
+.privacy-back-link a:hover { text-decoration: underline; }
+
+@media (max-width: 640px) {
+  .privacy-hero h1     { font-size: 1.7rem; }
+  .privacy-summary-grid { grid-template-columns: 1fr; }
+  .privacy-rights-grid  { grid-template-columns: 1fr; }
+  .privacy-notif-row    { grid-template-columns: 1fr 1fr; }
+  .privacy-cookie-row   { grid-template-columns: 1fr; }
+  .privacy-third-row    { grid-template-columns: 1fr; gap: 4px; }
+  .privacy-card-header  { padding: 18px 20px; }
+  .privacy-card-body    { padding: 18px 20px; }
+  .privacy-contact-card { padding: 32px 20px; }
+}
+</style>

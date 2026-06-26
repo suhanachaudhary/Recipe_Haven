@@ -1,0 +1,165 @@
+<% layout("/layouts/boilerplate") %>
+
+<style>
+.notif-page-header {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+  padding: 40px 0 36px;
+  color: white;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.notif-page-header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='20'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+.notif-page-header h1 { font-size: 1.9rem; font-weight: 800; color: white; position: relative; z-index: 1; }
+.notif-page-header p  { color: rgba(255,255,255,0.8); margin-top: 6px; position: relative; z-index: 1; }
+
+.notif-card {
+  background: var(--white);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,.04);
+}
+.notif-card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+}
+.notif-card-title {
+  font-size: 0.9rem; font-weight: 700; color: var(--dark);
+  display: flex; align-items: center; gap: 8px;
+}
+.notif-full-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--bg);
+  transition: background 0.15s;
+}
+.notif-full-item:last-child { border-bottom: none; }
+.notif-full-item.unread { background: #FFF8F0; }
+.notif-full-item:hover  { background: var(--bg); }
+
+.notif-icon-bubble {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.notif-icon-bubble.like    { background: var(--primary-light); color: var(--primary); }
+.notif-icon-bubble.comment { background: var(--primary-light); color: var(--primary); }
+.notif-icon-bubble.follow  { background: var(--primary-light); color: var(--primary); }
+
+.notif-body { flex: 1; min-width: 0; }
+.notif-msg  { font-size: 0.86rem; color: var(--dark); line-height: 1.5; font-weight: 500; }
+.notif-full-item.unread .notif-msg { font-weight: 700; }
+.notif-time { font-size: 0.73rem; color: var(--grey); margin-top: 4px; }
+.notif-recipe-link {
+  display: inline-flex; align-items: center; gap: 5px;
+  margin-top: 6px;
+  font-size: 0.75rem; font-weight: 600; color: var(--primary);
+  text-decoration: none;
+  background: var(--primary-light);
+  padding: 3px 10px; border-radius: 999px;
+  transition: background 0.15s;
+}
+.notif-recipe-link:hover { background: #FFD4B8; color: var(--primary-dark); }
+
+.notif-unread-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--primary); flex-shrink: 0; margin-top: 6px;
+}
+
+.notif-type-badge {
+  display: inline-block;
+  font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; padding: 2px 7px; border-radius: 4px; margin-bottom: 4px;
+  background: var(--primary-light); color: var(--primary-dark);
+}
+</style>
+
+<!-- Page Header -->
+<div class="notif-page-header">
+  <div class="container">
+    <h1><i class="fa-solid fa-bell me-2"></i>Notifications</h1>
+    <p>
+      <% const unread = notifications.filter(n => !n.read).length; %>
+      <%= notifications.length %> total
+      <% if (unread > 0) { %> · <strong style="color:#FCA5A5;"><%= unread %> unread</strong><% } %>
+    </p>
+  </div>
+</div>
+
+<div class="container mb-5" style="max-width:720px;">
+
+  <% if (notifications.length === 0) { %>
+    <div style="text-align:center;padding:80px 20px;">
+      <i class="fa-regular fa-bell-slash fa-3x d-block mb-3" style="color:var(--border);"></i>
+      <h4 style="color:var(--dark);font-weight:700;">All caught up!</h4>
+      <p style="color:var(--grey);font-size:0.9rem;">You have no notifications yet.<br>Like recipes, follow chefs, and leave comments to get started.</p>
+      <a href="/listings" class="btn btn-primary mt-2">
+        <i class="fa-solid fa-compass me-1"></i> Explore Recipes
+      </a>
+    </div>
+  <% } else { %>
+
+    <div class="notif-card">
+      <div class="notif-card-header">
+        <div class="notif-card-title">
+          <i class="fa-solid fa-bell" style="color:var(--primary);"></i>
+          All Notifications
+          <span style="font-size:0.72rem;font-weight:600;color:var(--grey);background:var(--border);padding:2px 8px;border-radius:999px;">
+            <%= notifications.length %>
+          </span>
+        </div>
+        <a href="/listings" style="font-size:0.78rem;color:var(--primary);font-weight:600;text-decoration:none;">
+          <i class="fa-solid fa-compass me-1"></i> Explore
+        </a>
+      </div>
+
+      <% const faIcons = { like: 'fa-thumbs-up', comment: 'fa-comment', follow: 'fa-user-plus' }; %>
+      <% notifications.forEach(function(n) { %>
+        <div class="notif-full-item <%= n.read ? '' : 'unread' %>">
+
+          <!-- Icon -->
+          <div class="notif-icon-bubble <%= n.type %>">
+            <i class="fa-solid <%= faIcons[n.type] || 'fa-bell' %>"></i>
+          </div>
+
+          <!-- Body -->
+          <div class="notif-body">
+            <div class="notif-type-badge <%= n.type %>"><%= n.type %></div>
+            <div class="notif-msg"><%= n.message %></div>
+            <div class="notif-time">
+              <i class="fa-regular fa-clock me-1"></i>
+              <%= new Date(n.createdAt).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' }) %>
+            </div>
+            <% if (n.listing && n.listing._id) { %>
+              <a href="/listings/<%= n.listing._id %>" class="notif-recipe-link">
+                <i class="fa-solid fa-utensils"></i> View <%= n.listing.title %>
+              </a>
+            <% } %>
+            <% if (n.type === 'follow' && n.sender) { %>
+              <a href="/profile/<%= n.sender.username %>" class="notif-recipe-link" style="background:#F0FDF4;color:#16A34A;">
+                <i class="fa-solid fa-user"></i> View @<%= n.sender.username %>
+              </a>
+            <% } %>
+          </div>
+
+          <!-- Unread dot -->
+          <% if (!n.read) { %>
+            <div class="notif-unread-dot"></div>
+          <% } %>
+        </div>
+      <% }); %>
+    </div>
+
+  <% } %>
+
+</div>
