@@ -20,7 +20,7 @@ module.exports.index = async (req, res) => {
 
     const totalCount = await Listing.countDocuments(query);
     const totalPages = Math.ceil(totalCount / limit);
-    const allListing = await Listing.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const allListing = await Listing.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).populate("owner");
 
     res.render("listings/index.ejs", {
         allListing,
